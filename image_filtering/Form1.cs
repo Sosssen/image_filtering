@@ -175,7 +175,12 @@ namespace image_filtering
 
             for (int x = x0; x <= x1; x++)
             {
-                if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height) bitmap.SetPixel(x, y, Color.Red);
+                if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height)
+                {
+                    Color oldColor = imageCopy.GetPixel(x, y);
+                    Color newColor = Color.FromArgb(255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
+                    bitmap.SetPixel(x, y, newColor);
+                }
                 if (D > 0)
                 {
                     y += sy;
@@ -203,7 +208,12 @@ namespace image_filtering
 
             for (int y = y0; y <= y1; y++)
             {
-                if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height) bitmap.SetPixel(x, y, Color.Red);
+                if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height)
+                {
+                    Color oldColor = imageCopy.GetPixel(x, y);
+                    Color newColor = Color.FromArgb(255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
+                    bitmap.SetPixel(x, y, newColor);
+                }
                 if (D > 0)
                 {
                     x += sx;
@@ -267,9 +277,9 @@ namespace image_filtering
         {
             moving = 0;
 
-            foreach (var point in circles)
+            using(Graphics g = Graphics.FromImage(imageCopy.Bitmap))
             {
-                midPointCircleDraw(imageCopy, point.X, point.Y, radius, Color.Red);
+                g.DrawImage(drawArea.Bitmap, 0, 0);
             }
 
             circles.Clear();
