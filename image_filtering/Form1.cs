@@ -14,13 +14,19 @@ namespace image_filtering
 {
     public partial class Form1 : Form
     {
-        private DirectBitmap db = null;
+        private DirectBitmap drawArea = null;
+        private DirectBitmap imageCopy = null;
+        private DirectBitmap drawAreaMask = null;
+        private DirectBitmap workingBitmap = null;
         private Bitmap image = null;
 
         private static int histogramSize = 256;
         private int[] histogramRed = new int[histogramSize];
         private int[] histogramGreen = new int[histogramSize];
         private int[] histogramBlue = new int[histogramSize];
+
+        private Pen pen = new Pen(Color.Black, 1);
+        private int radius = 100;
         public Form1()
         {
             InitializeComponent();
@@ -49,18 +55,47 @@ namespace image_filtering
         public void LoadImage(string filename)
         {
             image = new Bitmap(new Bitmap(filename), 512, 512);
-            db = new DirectBitmap(image.Width, image.Height);
-            using (Graphics g = Graphics.FromImage(db.Bitmap))
+            
+            // bitmapa do wyświetlenia
+            drawArea = new DirectBitmap(image.Width, image.Height);
+            Canvas.Width = image.Width;
+            Canvas.Height = image.Height;
+            Canvas.Image = drawArea.Bitmap;
+            RedrawImage();
+            
+            // kopia załadowanego zdjęcia
+            imageCopy = new DirectBitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(imageCopy.Bitmap))
             {
                 g.DrawImage(image, 0, 0);
             }
-            Canvas.Width = image.Width;
-            Canvas.Height = image.Height;
-            Canvas.Image = db.Bitmap;
-            Canvas.Invalidate();
-            Canvas.Update();
+
+            // maska używana po skończeniu rysowania
+            drawAreaMask = new DirectBitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
+            {
+                g.Clear(Color.White);
+            }
+
+            // bitmapa robocza - przy rysowaniu tutaj zapisujemy zamalowany obszar
+            workingBitmap = new DirectBitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(workingBitmap.Bitmap))
+            {
+                g.Clear(Color.White);
+            }
 
             CountHistogram();
+        }
+
+        public void RedrawImage()
+        {
+            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            {
+                g.DrawImage(image, 0, 0);
+            }
+
+            Canvas.Invalidate();
+            Canvas.Update();
         }
 
         public void CountHistogram()
@@ -73,7 +108,7 @@ namespace image_filtering
             {
                 for (int j = 0; j < image.Height; j++)
                 {
-                    Color color = db.GetPixel(i, j);
+                    Color color = drawArea.GetPixel(i, j);
                     histogramRed[color.R]++;
                     histogramGreen[color.G]++;
                     histogramBlue[color.B]++;
@@ -88,6 +123,17 @@ namespace image_filtering
                 greenChart.Series["green"].Points.Add(new DataPoint(i, histogramGreen[i]));
                 blueChart.Series["blue"].Points.Add(new DataPoint(i, histogramBlue[i]));
             }
+        }
+
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            RedrawImage();
+            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            {
+                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+            }
+            Canvas.Invalidate();
+            Canvas.Update();
         }
     }
 

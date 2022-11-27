@@ -84,6 +84,9 @@
     <Content Include="lib\landscape.jfif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\landscape.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\lenna.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
