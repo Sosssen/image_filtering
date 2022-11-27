@@ -17,7 +17,6 @@ namespace image_filtering
         private DirectBitmap drawArea = null;
         private DirectBitmap imageCopy = null;
         private DirectBitmap drawAreaMask = null;
-        private DirectBitmap workingBitmap = null;
         private Bitmap image = null;
 
         private static int histogramSize = 256;
@@ -28,7 +27,8 @@ namespace image_filtering
         private Pen pen = new Pen(Color.Black, 1);
         private Pen penRed = new Pen(Color.Red, 1);
         private SolidBrush sbRed = new SolidBrush(Color.Red);
-        private int radius = 20;
+        private int radius = 50;
+        private HashSet<Point> circles = new HashSet<Point>();
 
         private int moving = 0; // 0 - not moving, 1 - moving LPM, 2 - moving PPM
         public Form1()
@@ -58,13 +58,14 @@ namespace image_filtering
 
         public void LoadImage(string filename)
         {
+            // aktualny obraz, będzie modyfikowany
             image = new Bitmap(new Bitmap(filename), 512, 512);
             
             // bitmapa do wyświetlenia
             drawArea = new DirectBitmap(image.Width, image.Height);
             Canvas.Width = image.Width;
             Canvas.Height = image.Height;
-            // Canvas.Image = drawArea.Bitmap;
+            Canvas.Image = drawArea.Bitmap;
             
             // kopia załadowanego zdjęcia
             imageCopy = new DirectBitmap(image.Width, image.Height);
@@ -80,13 +81,6 @@ namespace image_filtering
                 g.Clear(Color.White);
             }
 
-            // bitmapa robocza - przy rysowaniu tutaj zapisujemy zamalowany obszar
-            workingBitmap = new DirectBitmap(image.Width, image.Height);
-            using (Graphics g = Graphics.FromImage(workingBitmap.Bitmap))
-            {
-                g.Clear(Color.White);
-            }
-
             Canvas.Image = drawAreaMask.Bitmap;
 
             RedrawImage();
@@ -98,22 +92,14 @@ namespace image_filtering
             using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
             {
                 g.DrawImage(image, 0, 0);
-            }
-
-            for (int i = 0; i < image.Width; i++)
-            {
-                for (int j = 0; j < image.Height; j++)
+                foreach (var point in circles)
                 {
-                    Color color = drawAreaMask.GetPixel(i, j);
-                    if (color.R == 255 && color.G == 0 && color.B == 0)
-                    {
-                        drawArea.Bitmap.SetPixel(i, j, Color.Red);
-                    }
+                    g.DrawEllipse(penRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
+                    g.FillEllipse(sbRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
                 }
             }
 
             Canvas.Image = drawArea.Bitmap;
-
             Canvas.Invalidate();
             Canvas.Update();
         }
@@ -150,21 +136,9 @@ namespace image_filtering
 
             if (moving == 1)
             {
-                using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
-                {
-                    g.DrawEllipse(penRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
-                    g.FillEllipse(sbRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
-                }
+                circles.Add(new Point(e.X, e.Y));
                 RedrawImage();
             }
-            // TODO: draw circle around cursor (done, but bring it back)
-            //RedrawImage();
-            //using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
-            //{
-            //    g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
-            //}
-            //Canvas.Invalidate();
-            //Canvas.Update();
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
@@ -172,11 +146,7 @@ namespace image_filtering
             if (e.Button == MouseButtons.Left)
             {
                 moving = 1;
-                using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
-                {
-                    g.DrawEllipse(penRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
-                    g.FillEllipse(sbRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
-                }
+                circles.Add(new Point(e.X, e.Y));
                 RedrawImage();
             }
         }
@@ -184,6 +154,26 @@ namespace image_filtering
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
         {
             moving = 0;
+            using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
+            {
+                foreach (var point in circles)
+                {
+                    g.DrawEllipse(penRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
+                    g.FillEllipse(sbRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
+                }
+            }
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                foreach (var point in circles)
+                {
+                    g.DrawEllipse(penRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
+                    g.FillEllipse(sbRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
+                }
+            }
+            circles.Clear();
+            RedrawImage();
+            CountHistogram();
+            
         }
     }
 
