@@ -74,15 +74,6 @@ namespace image_filtering
                 g.DrawImage(image, 0, 0);
             }
 
-            // maska używana po skończeniu rysowania
-            drawAreaMask = new DirectBitmap(image.Width, image.Height);
-            using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
-            {
-                g.Clear(Color.White);
-            }
-
-            Canvas.Image = drawAreaMask.Bitmap;
-
             RedrawImage();
             CountHistogram();
         }
@@ -91,11 +82,9 @@ namespace image_filtering
         {
             using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
             {
-                g.DrawImage(image, 0, 0);
+                g.DrawImage(imageCopy.Bitmap, 0, 0);
                 foreach (var point in circles)
                 {
-                    //g.DrawEllipse(penRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
-                    //g.FillEllipse(sbRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
                     midPointCircleDraw(drawArea, point.X, point.Y, radius, Color.Red);
                 }
             }
@@ -110,122 +99,68 @@ namespace image_filtering
 
             int x = r, y = 0;
 
-            // Printing the initial point on the
-            // axes after translation
+            DrawLine(bitmap, x + x_centre, y + y_centre, -x + x_centre, y + y_centre);
 
-            // bitmap.SetPixel(-x + x_centre, y + y_centre, color);
-            //Console.Write("(" + (x + x_centre)
-            //        + ", " + (y + y_centre) + ")");
+            DrawLine(bitmap, y + x_centre, x + y_centre, y + x_centre, x + y_centre);
 
-            drawLine(x + x_centre, y + y_centre, -x + x_centre, y + y_centre);
-
-            // When radius is zero only a single
-            // point will be printed
-            // bitmap.SetPixel(x + x_centre, -y + y_centre, color);
-            //Console.Write("(" + (x + x_centre)
-            //    + ", " + (-y + y_centre) + ")");
-
-            drawLine(y + x_centre, x + y_centre, y + x_centre, x + y_centre);
-            //Console.Write("(" + (y + x_centre)
-            //    + ", " + (x + y_centre) + ")");
-
-            drawLine(y + x_centre, -x + y_centre, y + x_centre, -x + y_centre);
+            DrawLine(bitmap, y + x_centre, -x + y_centre, y + x_centre, -x + y_centre);
             int P = 1 - r;
             while (x > y)
             {
 
                 y++;
 
-                // Mid-point is inside or on the perimeter
                 if (P <= 0)
                     P = P + 2 * y + 1;
 
-                // Mid-point is outside the perimeter
                 else
                 {
                     x--;
                     P = P + 2 * y - 2 * x + 1;
                 }
 
-                // All the perimeter points have already
-                // been printed
                 if (x < y)
                     break;
 
-                // Printing the generated point and its
-                // reflection in the other octants after
-                // translation
-                // bitmap.SetPixel(x + x_centre, y + y_centre, color);
-                //Console.Write("(" + (x + x_centre)
-                //        + ", " + (y + y_centre) + ")");
+                DrawLine(bitmap, x + x_centre, y + y_centre, -x + x_centre, y + y_centre);
 
-                // bitmap.SetPixel(-x + x_centre, y + y_centre, color);
-                //Console.Write("(" + (-x + x_centre)
-                //        + ", " + (y + y_centre) + ")");
-                drawLine(x + x_centre, y + y_centre, -x + x_centre, y + y_centre);
+                DrawLine(bitmap, x + x_centre, -y + y_centre, -x + x_centre, -y + y_centre);
 
-                // bitmap.SetPixel(x + x_centre, -y + y_centre, color);
-                //Console.Write("(" + (x + x_centre) +
-                //        ", " + (-y + y_centre) + ")");
-
-                // bitmap.SetPixel(-x + x_centre, -y + y_centre, color);
-                //Console.WriteLine("(" + (-x + x_centre)
-                //        + ", " + (-y + y_centre) + ")");
-                drawLine(x + x_centre, -y + y_centre, -x + x_centre, -y + y_centre);
-                // If the generated point is on the
-                // line x = y then the perimeter points
-                // have already been printed
                 if (x != y)
                 {
-                    // bitmap.SetPixel(y + x_centre, x + y_centre, color);
-                    //Console.Write("(" + (y + x_centre)
-                    //    + ", " + (x + y_centre) + ")");
+                    DrawLine(bitmap, y + x_centre, x + y_centre, -y + x_centre, x + y_centre);
 
-                    // bitmap.SetPixel(-y + x_centre, x + y_centre, color);
-                    //Console.Write("(" + (-y + x_centre)
-                    //    + ", " + (x + y_centre) + ")");
-
-                    drawLine(y + x_centre, x + y_centre, -y + x_centre, x + y_centre);
-
-                    // bitmap.SetPixel(y + x_centre, -x + y_centre, color);
-                    //Console.Write("(" + (y + x_centre)
-                    //    + ", " + (-x + y_centre) + ")");
-
-                    // bitmap.SetPixel(-y + x_centre, -x + y_centre, color);
-
-                    drawLine(y + x_centre, -x + y_centre, -y + x_centre, -x + y_centre);
-                    //Console.WriteLine("(" + (-y + x_centre)
-                    //    + ", " + (-x + y_centre) + ")");
+                    DrawLine(bitmap, y + x_centre, -x + y_centre, -y + x_centre, -x + y_centre);
                 }
             }
         }
-        private void drawLine(int x0, int y0, int x1, int y1)
+        private void DrawLine(DirectBitmap bitmap, int x0, int y0, int x1, int y1)
         {
             if (Math.Abs(y1 - y0) < Math.Abs(x1 - x0))
             {
                 if (x0 > x1)
                 {
-                    drawLineLow(x1, y1, x0, y0);
+                    DrawLineLow(bitmap, x1, y1, x0, y0);
                 }
                 else
                 {
-                    drawLineLow(x0, y0, x1, y1);
+                    DrawLineLow(bitmap, x0, y0, x1, y1);
                 }
             }
             else
             {
                 if (y0 > y1)
                 {
-                    drawLineHigh(x1, y1, x0, y0);
+                    DrawLineHigh(bitmap, x1, y1, x0, y0);
                 }
                 else
                 {
-                    drawLineHigh(x0, y0, x1, y1);
+                    DrawLineHigh(bitmap, x0, y0, x1, y1);
                 }
             }
         }
 
-        private void drawLineLow(int x0, int y0, int x1, int y1)
+        private void DrawLineLow(DirectBitmap bitmap, int x0, int y0, int x1, int y1)
         {
             int dx = x1 - x0;
             int dy = y1 - y0;
@@ -240,7 +175,7 @@ namespace image_filtering
 
             for (int x = x0; x <= x1; x++)
             {
-                if (x >= 0 && y >= 0 && x < drawArea.Width && y < drawArea.Height) drawArea.SetPixel(x, y, Color.Red);
+                if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height) bitmap.SetPixel(x, y, Color.Red);
                 if (D > 0)
                 {
                     y += sy;
@@ -253,7 +188,7 @@ namespace image_filtering
             }
         }
 
-        private void drawLineHigh(int x0, int y0, int x1, int y1)
+        private void DrawLineHigh(DirectBitmap bitmap, int x0, int y0, int x1, int y1)
         {
             int dx = x1 - x0;
             int dy = y1 - y0;
@@ -268,7 +203,7 @@ namespace image_filtering
 
             for (int y = y0; y <= y1; y++)
             {
-                if (x >= 0 && y >= 0 && x < drawArea.Width && y < drawArea.Height) drawArea.SetPixel(x, y, Color.Red);
+                if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height) bitmap.SetPixel(x, y, Color.Red);
                 if (D > 0)
                 {
                     x += sx;
@@ -331,22 +266,12 @@ namespace image_filtering
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
         {
             moving = 0;
-            using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
+
+            foreach (var point in circles)
             {
-                foreach (var point in circles)
-                {
-                    g.DrawEllipse(penRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
-                    g.FillEllipse(sbRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
-                }
+                midPointCircleDraw(imageCopy, point.X, point.Y, radius, Color.Red);
             }
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                foreach (var point in circles)
-                {
-                    g.DrawEllipse(penRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
-                    g.FillEllipse(sbRed, point.X - radius, point.Y - radius, 2 * radius, 2 * radius);
-                }
-            }
+
             circles.Clear();
             RedrawImage();
             CountHistogram();
