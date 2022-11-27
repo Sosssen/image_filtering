@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace image_filtering
 {
@@ -34,13 +35,20 @@ namespace image_filtering
             int h = (int)(screen.Height / 1.25);
             this.Size = new Size(w, h);
 
+            redChart.ChartAreas[0].AxisX.Minimum = 0;
+            redChart.ChartAreas[0].AxisX.Maximum = 255;
+            greenChart.ChartAreas[0].AxisX.Minimum = 0;
+            greenChart.ChartAreas[0].AxisX.Maximum = 255;
+            blueChart.ChartAreas[0].AxisX.Minimum = 0;
+            blueChart.ChartAreas[0].AxisX.Maximum = 255;
+
             string filename = @".\lib\lenna.png";
             LoadImage(filename);
         }
 
         public void LoadImage(string filename)
         {
-            image = new Bitmap(filename);
+            image = new Bitmap(new Bitmap(filename), 512, 512);
             db = new DirectBitmap(image.Width, image.Height);
             using (Graphics g = Graphics.FromImage(db.Bitmap))
             {
@@ -51,6 +59,35 @@ namespace image_filtering
             Canvas.Image = db.Bitmap;
             Canvas.Invalidate();
             Canvas.Update();
+
+            CountHistogram();
+        }
+
+        public void CountHistogram()
+        {
+            Array.Clear(histogramRed, 0, histogramSize);
+            Array.Clear(histogramGreen, 0, histogramSize);
+            Array.Clear(histogramBlue, 0, histogramSize);
+
+            for (int i = 0; i < image.Width; i++)
+            {
+                for (int j = 0; j < image.Height; j++)
+                {
+                    Color color = db.GetPixel(i, j);
+                    histogramRed[color.R]++;
+                    histogramGreen[color.G]++;
+                    histogramBlue[color.B]++;
+                }
+            }
+            redChart.Series["red"].Points.Clear();
+            greenChart.Series["green"].Points.Clear();
+            blueChart.Series["blue"].Points.Clear();
+            for (int i = 0; i < histogramSize; i++)
+            {
+                redChart.Series["red"].Points.Add(new DataPoint(i, histogramRed[i]));
+                greenChart.Series["green"].Points.Add(new DataPoint(i, histogramGreen[i]));
+                blueChart.Series["blue"].Points.Add(new DataPoint(i, histogramBlue[i]));
+            }
         }
     }
 
