@@ -26,7 +26,11 @@ namespace image_filtering
         private int[] histogramBlue = new int[histogramSize];
 
         private Pen pen = new Pen(Color.Black, 1);
-        private int radius = 100;
+        private Pen penRed = new Pen(Color.Red, 1);
+        private SolidBrush sbRed = new SolidBrush(Color.Red);
+        private int radius = 20;
+
+        private int moving = 0; // 0 - not moving, 1 - moving LPM, 2 - moving PPM
         public Form1()
         {
             InitializeComponent();
@@ -60,8 +64,7 @@ namespace image_filtering
             drawArea = new DirectBitmap(image.Width, image.Height);
             Canvas.Width = image.Width;
             Canvas.Height = image.Height;
-            Canvas.Image = drawArea.Bitmap;
-            RedrawImage();
+            // Canvas.Image = drawArea.Bitmap;
             
             // kopia załadowanego zdjęcia
             imageCopy = new DirectBitmap(image.Width, image.Height);
@@ -84,6 +87,9 @@ namespace image_filtering
                 g.Clear(Color.White);
             }
 
+            Canvas.Image = drawAreaMask.Bitmap;
+
+            RedrawImage();
             CountHistogram();
         }
 
@@ -93,6 +99,20 @@ namespace image_filtering
             {
                 g.DrawImage(image, 0, 0);
             }
+
+            for (int i = 0; i < image.Width; i++)
+            {
+                for (int j = 0; j < image.Height; j++)
+                {
+                    Color color = drawAreaMask.GetPixel(i, j);
+                    if (color.R == 255 && color.G == 0 && color.B == 0)
+                    {
+                        drawArea.Bitmap.SetPixel(i, j, Color.Red);
+                    }
+                }
+            }
+
+            Canvas.Image = drawArea.Bitmap;
 
             Canvas.Invalidate();
             Canvas.Update();
@@ -127,13 +147,43 @@ namespace image_filtering
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            RedrawImage();
-            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+
+            if (moving == 1)
             {
-                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
+                {
+                    g.DrawEllipse(penRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                    g.FillEllipse(sbRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                }
+                RedrawImage();
             }
-            Canvas.Invalidate();
-            Canvas.Update();
+            // TODO: draw circle around cursor (done, but bring it back)
+            //RedrawImage();
+            //using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            //{
+            //    g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+            //}
+            //Canvas.Invalidate();
+            //Canvas.Update();
+        }
+
+        private void Canvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                moving = 1;
+                using (Graphics g = Graphics.FromImage(drawAreaMask.Bitmap))
+                {
+                    g.DrawEllipse(penRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                    g.FillEllipse(sbRed, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                }
+                RedrawImage();
+            }
+        }
+
+        private void Canvas_MouseUp(object sender, MouseEventArgs e)
+        {
+            moving = 0;
         }
     }
 

@@ -77,7 +77,9 @@ namespace image_filtering
             this.Canvas.Size = new System.Drawing.Size(781, 1123);
             this.Canvas.TabIndex = 0;
             this.Canvas.TabStop = false;
+            this.Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseDown);
             this.Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseMove);
+            this.Canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseUp);
             // 
             // tableLayoutPanel2
             // 
