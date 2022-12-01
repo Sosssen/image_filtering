@@ -27,7 +27,7 @@ namespace image_filtering
         private Pen pen = new Pen(Color.Black, 1);
         private Pen penRed = new Pen(Color.Red, 1);
         private SolidBrush sbRed = new SolidBrush(Color.Red);
-        private int radius = 50;
+        private int radius = 20;
         private HashSet<Point> circles = new HashSet<Point>();
 
         private int moving = 0; // 0 - not moving, 1 - moving LPM, 2 - moving PPM
@@ -45,12 +45,18 @@ namespace image_filtering
             int h = (int)(screen.Height / 1.25);
             this.Size = new Size(w, h);
 
-            redChart.ChartAreas[0].AxisX.Minimum = 0;
-            redChart.ChartAreas[0].AxisX.Maximum = 255;
-            greenChart.ChartAreas[0].AxisX.Minimum = 0;
-            greenChart.ChartAreas[0].AxisX.Maximum = 255;
-            blueChart.ChartAreas[0].AxisX.Minimum = 0;
-            blueChart.ChartAreas[0].AxisX.Maximum = 255;
+            redChart.ChartAreas[0].AxisX.Minimum = -1;
+            redChart.ChartAreas[0].AxisX.Maximum = 256;
+            redChart.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            redChart.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            greenChart.ChartAreas[0].AxisX.Minimum = -1;
+            greenChart.ChartAreas[0].AxisX.Maximum = 256;
+            greenChart.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            greenChart.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            blueChart.ChartAreas[0].AxisX.Minimum = -1;
+            blueChart.ChartAreas[0].AxisX.Maximum = 256;
+            blueChart.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            blueChart.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
 
             string filename = @".\lib\lenna.png";
             LoadImage(filename);
