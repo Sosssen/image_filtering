@@ -19,6 +19,15 @@ namespace image_filtering
         private DirectBitmap drawAreaMask = null;
         private Bitmap image = null;
 
+        private int[] negationArr = new int[256];
+        private int[] brightnessArr = new int[256];
+        private int brightnessConst = 30;
+        private int[] gammaArr = new int[256];
+        private double gammaConst = 2.0;
+        private int[] contrastArr = new int[256];
+        private int contrastConst = 40;
+        private int[] ownArr = new int[256];
+
         private static int histogramSize = 256;
         private int[] histogramRed = new int[histogramSize];
         private int[] histogramGreen = new int[histogramSize];
@@ -27,7 +36,7 @@ namespace image_filtering
         private Pen pen = new Pen(Color.Black, 1);
         private Pen penRed = new Pen(Color.Red, 1);
         private SolidBrush sbRed = new SolidBrush(Color.Red);
-        private int radius = 20;
+        private int radius = 1000;
         private HashSet<Point> circles = new HashSet<Point>();
 
         private int moving = 0; // 0 - not moving, 1 - moving LPM, 2 - moving PPM
@@ -58,21 +67,59 @@ namespace image_filtering
             blueChart.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
             blueChart.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
 
-            string filename = @".\lib\lenna.png";
+            InitializeFilterArrays();
+
+            string filename = @".\lib\landscape.png";
             LoadImage(filename);
+        }
+
+        public void InitializeFilterArrays()
+        {
+            for (int i = 0; i < negationArr.Length; i++)
+            {
+                negationArr[i] = 255 - i;
+            }
+
+            for (int i = 0; i < brightnessConst; i++)
+            {
+                brightnessArr[i] = 0;
+            }
+
+            for (int i = brightnessConst; i < brightnessArr.Length; i++)
+            {
+                brightnessArr[i] = i - brightnessConst;
+            }
+
+            for (int i = 0; i < gammaArr.Length; i++)
+            {
+                double tmp = (double)i / 255.0;
+                tmp = Math.Pow(tmp, gammaConst);
+                gammaArr[i] = (int)(tmp * 255);
+            }
+
+            for (int i = 0; i < contrastConst; i++)
+            {
+                contrastArr[i] = 0;
+                contrastArr[contrastArr.Length - i - 1] = 255;
+            }
+            double h = 255.0 / (255.0 - 2 * contrastConst);
+            for (int i = contrastConst; i < contrastArr.Length - contrastConst; i++)
+            {
+                contrastArr[i] = (int)(contrastArr[i - 1] + h);
+            }
         }
 
         public void LoadImage(string filename)
         {
             // aktualny obraz, będzie modyfikowany
             image = new Bitmap(new Bitmap(filename), 512, 512);
-            
+
             // bitmapa do wyświetlenia
             drawArea = new DirectBitmap(image.Width, image.Height);
             Canvas.Width = image.Width;
             Canvas.Height = image.Height;
             Canvas.Image = drawArea.Bitmap;
-            
+
             // kopia załadowanego zdjęcia
             imageCopy = new DirectBitmap(image.Width, image.Height);
             using (Graphics g = Graphics.FromImage(imageCopy.Bitmap))
@@ -183,9 +230,10 @@ namespace image_filtering
             {
                 if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height)
                 {
-                    Color oldColor = imageCopy.GetPixel(x, y);
-                    Color newColor = Color.FromArgb(255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
-                    bitmap.SetPixel(x, y, newColor);
+                    // Color oldColor = imageCopy.GetPixel(x, y);
+                    // Color newColor = Color.FromArgb(255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
+                    Color color = GetColor(x, y);
+                    bitmap.SetPixel(x, y, color);
                 }
                 if (D > 0)
                 {
@@ -216,9 +264,8 @@ namespace image_filtering
             {
                 if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height)
                 {
-                    Color oldColor = imageCopy.GetPixel(x, y);
-                    Color newColor = Color.FromArgb(255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
-                    bitmap.SetPixel(x, y, newColor);
+                    Color color = GetColor(x, y);
+                    bitmap.SetPixel(x, y, color);
                 }
                 if (D > 0)
                 {
@@ -230,6 +277,32 @@ namespace image_filtering
                     D += 2 * dx;
                 }
             }
+        }
+
+        public Color GetColor(int x, int y)
+        {
+            Color old = imageCopy.GetPixel(x, y);
+            if (eraseRadioButton.Checked)
+            {
+                return old;
+            }
+            else if (negationRadioButton.Checked)
+            {
+                return Color.FromArgb(negationArr[old.R], negationArr[old.G], negationArr[old.B]);
+            }
+            else if (brightnessRadioButton.Checked)
+            {
+                return Color.FromArgb(brightnessArr[old.R], brightnessArr[old.G], brightnessArr[old.B]);
+            }
+            else if (gammaRadioButton.Checked)
+            {
+                return Color.FromArgb(gammaArr[old.R], gammaArr[old.G], gammaArr[old.B]);
+            }
+            else if (contrastRadioButton.Checked)
+            {
+                return Color.FromArgb(contrastArr[old.R], contrastArr[old.G], contrastArr[old.B]);
+            }
+            else return Color.White;
         }
 
         public void CountHistogram()
