@@ -17,6 +17,7 @@ namespace image_filtering
         private DirectBitmap drawArea = null;
         private DirectBitmap imageCopy = null;
         private DirectBitmap drawAreaMask = null;
+        private DirectBitmap imageBackup = null;
         private Bitmap image = null;
 
         private int[] negationArr = new int[256];
@@ -123,6 +124,12 @@ namespace image_filtering
             // kopia załadowanego zdjęcia
             imageCopy = new DirectBitmap(image.Width, image.Height);
             using (Graphics g = Graphics.FromImage(imageCopy.Bitmap))
+            {
+                g.DrawImage(image, 0, 0);
+            }
+
+            imageBackup = new DirectBitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(imageBackup.Bitmap))
             {
                 g.DrawImage(image, 0, 0);
             }
@@ -284,7 +291,7 @@ namespace image_filtering
             Color old = imageCopy.GetPixel(x, y);
             if (eraseRadioButton.Checked)
             {
-                return old;
+                return imageBackup.GetPixel(x, y);
             }
             else if (negationRadioButton.Checked)
             {
@@ -311,9 +318,9 @@ namespace image_filtering
             Array.Clear(histogramGreen, 0, histogramSize);
             Array.Clear(histogramBlue, 0, histogramSize);
 
-            for (int i = 0; i < image.Width; i++)
+            for (int i = 0; i < drawArea.Width; i++)
             {
-                for (int j = 0; j < image.Height; j++)
+                for (int j = 0; j < drawArea.Height; j++)
                 {
                     Color color = drawArea.GetPixel(i, j);
                     histogramRed[color.R]++;
