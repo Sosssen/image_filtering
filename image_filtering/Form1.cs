@@ -16,10 +16,10 @@ namespace image_filtering
     {
         private DirectBitmap drawArea = null;
         private DirectBitmap imageCopy = null;
-        private DirectBitmap drawAreaMask = null;
         private DirectBitmap imageBackup = null;
         private Bitmap image = null;
 
+        private int[] antifilterArr = new int[256];
         private int[] negationArr = new int[256];
         private int[] brightnessArr = new int[256];
         private int brightnessConst = 30;
@@ -28,6 +28,7 @@ namespace image_filtering
         private int[] contrastArr = new int[256];
         private int contrastConst = 40;
         private int[] ownArr = new int[256];
+        
 
         private static int histogramSize = 256;
         private int[] histogramRed = new int[histogramSize];
@@ -37,10 +38,15 @@ namespace image_filtering
         private Pen pen = new Pen(Color.Black, 1);
         private Pen penRed = new Pen(Color.Red, 1);
         private SolidBrush sbRed = new SolidBrush(Color.Red);
-        private int radius = 1000;
+        private int radius = 30;
         private HashSet<Point> circles = new HashSet<Point>();
 
         private int moving = 0; // 0 - not moving, 1 - moving LPM, 2 - moving PPM
+
+        private MyPoint[] bezierPoints = new MyPoint[4];
+        private bool movingBezier = false;
+        private int bezierIndex = 0;
+        private int bezierRadius = 5;
         public Form1()
         {
             InitializeComponent();
@@ -68,7 +74,32 @@ namespace image_filtering
             blueChart.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
             blueChart.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
 
+            filterChart.ChartAreas[0].AxisX2.Enabled = AxisEnabled.True;
+            filterChart.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
+            filterChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            filterChart.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
+            filterChart.ChartAreas[0].AxisX2.MajorGrid.Enabled = false;
+            filterChart.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+            filterChart.ChartAreas[0].AxisX.Minimum = 0;
+            filterChart.ChartAreas[0].AxisX.Maximum = 255;
+            filterChart.ChartAreas[0].AxisY.Minimum = 0;
+            filterChart.ChartAreas[0].AxisY.Maximum = 255;
+            filterChart.ChartAreas[0].AxisX2.Minimum = 0;
+            filterChart.ChartAreas[0].AxisX2.Maximum = 255;
+            filterChart.ChartAreas[0].AxisY2.Minimum = 0;
+            filterChart.ChartAreas[0].AxisY2.Maximum = 255;
+            filterChart.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            filterChart.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            filterChart.ChartAreas[0].AxisX2.LabelStyle.Enabled = false;
+            filterChart.ChartAreas[0].AxisY2.LabelStyle.Enabled = false;
+            filterChart.ChartAreas[0].CursorX.LineWidth = 0;
+            filterChart.ChartAreas[0].CursorY.LineWidth = 0;
+
+
+
             InitializeFilterArrays();
+
+            DrawFilterChart();
 
             string filename = @".\lib\landscape.png";
             LoadImage(filename);
@@ -76,6 +107,11 @@ namespace image_filtering
 
         public void InitializeFilterArrays()
         {
+            for (int i = 0; i < antifilterArr.Length; i++)
+            {
+                antifilterArr[i] = i;
+            }
+
             for (int i = 0; i < negationArr.Length; i++)
             {
                 negationArr[i] = 255 - i;
@@ -104,10 +140,21 @@ namespace image_filtering
                 contrastArr[contrastArr.Length - i - 1] = 255;
             }
             double h = 255.0 / (255.0 - 2 * contrastConst);
+            double currVal = 0;
             for (int i = contrastConst; i < contrastArr.Length - contrastConst; i++)
             {
-                contrastArr[i] = (int)(contrastArr[i - 1] + h);
+                currVal += h;
+                contrastArr[i] = Math.Min((int)currVal, 255);
             }
+
+            bezierPoints[0] = new MyPoint(0, 0);
+            bezierPoints[1] = new MyPoint(50, 200);
+            bezierPoints[2] = new MyPoint(200, 50);
+            bezierPoints[3] = new MyPoint(255, 255);
+
+            CountBezier();
+
+
         }
 
         public void LoadImage(string filename)
@@ -293,6 +340,10 @@ namespace image_filtering
             {
                 return imageBackup.GetPixel(x, y);
             }
+            else if (antifilterRadioButton.Checked)
+            {
+                return Color.FromArgb(antifilterArr[old.R], antifilterArr[old.G], antifilterArr[old.B]);
+            }
             else if (negationRadioButton.Checked)
             {
                 return Color.FromArgb(negationArr[old.R], negationArr[old.G], negationArr[old.B]);
@@ -308,6 +359,10 @@ namespace image_filtering
             else if (contrastRadioButton.Checked)
             {
                 return Color.FromArgb(contrastArr[old.R], contrastArr[old.G], contrastArr[old.B]);
+            }
+            else if (ownRadioButton.Checked)
+            {
+                return Color.FromArgb(ownArr[old.R], ownArr[old.G], ownArr[old.B]);
             }
             else return Color.White;
         }
@@ -336,6 +391,64 @@ namespace image_filtering
                 redChart.Series["red"].Points.Add(new DataPoint(i, histogramRed[i]));
                 greenChart.Series["green"].Points.Add(new DataPoint(i, histogramGreen[i]));
                 blueChart.Series["blue"].Points.Add(new DataPoint(i, histogramBlue[i]));
+            }
+        }
+
+        public void DrawFilterChart()
+        {
+            filterChart.Series["filter"].Points.Clear();
+            filterChart.Series["bezierPoints"].Points.Clear();
+
+            if (eraseRadioButton.Checked)
+            {
+                filterChart.Series["filter"].Points.Add(new DataPoint(-1, -1));
+            }
+            else if(antifilterRadioButton.Checked)
+            {
+                for (int i = 0; i < antifilterArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, antifilterArr[i]));
+                }
+            }
+            else if (negationRadioButton.Checked)
+            {
+                for (int i = 0; i < negationArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, negationArr[i]));
+                }
+            }
+            else if (brightnessRadioButton.Checked)
+            {
+                for (int i = 0; i < brightnessArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, brightnessArr[i]));
+                }
+            }
+            else if (gammaRadioButton.Checked)
+            {
+                for (int i = 0; i < gammaArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, gammaArr[i]));
+                }
+            }
+            else if (contrastRadioButton.Checked)
+            {
+                for (int i = 0; i < contrastArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, contrastArr[i]));
+                }
+            }
+            else if (ownRadioButton.Checked)
+            {
+                for (int i = 0; i < ownArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, ownArr[i]));
+                }
+
+                foreach (var point in bezierPoints)
+                {
+                    filterChart.Series["bezierPoints"].Points.Add(new DataPoint(point.x, point.y));
+                }
             }
         }
 
@@ -372,6 +485,136 @@ namespace image_filtering
             RedrawImage();
             CountHistogram();
             
+        }
+
+        private void eraseRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void negationRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void brightnessRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void gammaRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void contrastRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void antifilterRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void ownRadioButton_Click(object sender, EventArgs e)
+        {
+            DrawFilterChart();
+        }
+
+        private void filterChart_MouseDown(object sender, MouseEventArgs e)
+        {
+            filterChart.ChartAreas[0].CursorX.Position = double.NaN;
+            filterChart.ChartAreas[0].CursorY.Position = double.NaN;
+            filterChart.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), false);
+            filterChart.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), false);
+            double px = filterChart.ChartAreas[0].CursorX.Position;
+            double py = filterChart.ChartAreas[0].CursorY.Position;
+            for (int i = 0; i < bezierPoints.Length; i++)
+            {
+                var point = bezierPoints[i];
+                if ((point.x - px) * (point.x - px) + (point.y - py) * (point.y - py) < bezierRadius * bezierRadius)
+                {
+                    movingBezier = true;
+                    bezierIndex = i;
+                }
+            }
+        }
+
+        private void filterChart_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (movingBezier)
+            {
+                // filterChart.ChartAreas[0].CursorX.Position = double.NaN;
+                // filterChart.ChartAreas[0].CursorY.Position = double.NaN;
+                filterChart.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), false);
+                filterChart.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), false);
+                int px = (int)filterChart.ChartAreas[0].CursorX.Position;
+                int py = (int)filterChart.ChartAreas[0].CursorY.Position;
+
+                if (px < 0 || bezierIndex == 0) px = 0;
+                if (px > 255 || bezierIndex == 3) px = 255;
+                if (py < 0) py = 0;
+                if (py > 255) py = 255;
+
+                bezierPoints[bezierIndex].x = px;
+                bezierPoints[bezierIndex].y = py;
+                filterChart.Series["bezierPoints"].Points.Clear();
+                filterChart.Series["filter"].Points.Clear();
+
+                CountBezier();
+
+                for (int i = 0; i < ownArr.Length; i++)
+                {
+                    filterChart.Series["filter"].Points.Add(new DataPoint(i, ownArr[i]));
+                }
+
+                for (int i = 0; i < bezierPoints.Length; i++)
+                {
+                    filterChart.Series["bezierPoints"].Points.Add(new DataPoint(bezierPoints[i].x, bezierPoints[i].y));
+                }
+
+                
+            }
+        }
+
+        public void CountBezier()
+        {
+            MyPoint V0 = bezierPoints[0];
+            MyPoint V1 = bezierPoints[1];
+            MyPoint V2 = bezierPoints[2];
+            MyPoint V3 = bezierPoints[3];
+
+            for (int i = 0; i < ownArr.Length; i++)
+            {
+                ownArr[i] = -1;
+            }
+
+            int A0x = V0.x;
+            int A0y = V0.y;
+            int A1x = 3 * (V1.x - V0.x);
+            int A1y = 3 * (V1.y - V0.y);
+            int A2x = 3 * (V2.x - 2 * V1.x + V0.x);
+            int A2y = 3 * (V2.y - 2 * V1.y + V0.y);
+            int A3x = V3.x - 3 * V2.x + 3 * V1.x - V0.x;
+            int A3y = V3.y - 3 * V2.y + 3 * V1.y - V0.y;
+
+            for (double t = 0.0; t <= 1.0; t += 0.001)
+            {
+                double tx = A0x + t * (A1x + t * (A2x + t * A3x));
+                double ty = A0y + t * (A1y + t * (A2y + t * A3y));
+                // tx *= 255;
+                // ty *= 255;
+                // Debug.WriteLine($"{tx}, {ty}");
+                if (ty < 0) ty = 0;
+                if (ty > 255) ty = 255;
+                ownArr[(int)Math.Round(tx, 0)] = (int)Math.Round(ty, 0);
+            }
+        }
+
+        private void filterChart_MouseUp(object sender, MouseEventArgs e)
+        {
+            movingBezier = false;
         }
     }
 
@@ -417,6 +660,18 @@ namespace image_filtering
             Disposed = true;
             Bitmap.Dispose();
             BitsHandle.Free();
+        }
+    }
+
+    public class MyPoint
+    {
+        public int x;
+        public int y;
+
+        public MyPoint(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
         }
     }
 }

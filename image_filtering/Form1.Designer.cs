@@ -41,6 +41,11 @@ namespace image_filtering
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint5 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint6 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(10D, 10D);
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
+            System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(10D, 10D);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Canvas = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -50,11 +55,13 @@ namespace image_filtering
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.eraseRadioButton = new System.Windows.Forms.RadioButton();
-            this.negationRadioButton = new System.Windows.Forms.RadioButton();
-            this.brightnessRadioButton = new System.Windows.Forms.RadioButton();
-            this.gammaRadioButton = new System.Windows.Forms.RadioButton();
-            this.contrastRadioButton = new System.Windows.Forms.RadioButton();
             this.ownRadioButton = new System.Windows.Forms.RadioButton();
+            this.contrastRadioButton = new System.Windows.Forms.RadioButton();
+            this.gammaRadioButton = new System.Windows.Forms.RadioButton();
+            this.brightnessRadioButton = new System.Windows.Forms.RadioButton();
+            this.negationRadioButton = new System.Windows.Forms.RadioButton();
+            this.antifilterRadioButton = new System.Windows.Forms.RadioButton();
+            this.filterChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
@@ -63,6 +70,7 @@ namespace image_filtering
             ((System.ComponentModel.ISupportInitialize)(this.greenChart)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterChart)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -173,6 +181,7 @@ namespace image_filtering
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.filterChart, 0, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(947, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -188,21 +197,23 @@ namespace image_filtering
             this.tableLayoutPanel4.ColumnCount = 1;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Controls.Add(this.eraseRadioButton, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.negationRadioButton, 0, 1);
-            this.tableLayoutPanel4.Controls.Add(this.brightnessRadioButton, 0, 2);
-            this.tableLayoutPanel4.Controls.Add(this.gammaRadioButton, 0, 3);
-            this.tableLayoutPanel4.Controls.Add(this.contrastRadioButton, 0, 4);
-            this.tableLayoutPanel4.Controls.Add(this.ownRadioButton, 0, 5);
+            this.tableLayoutPanel4.Controls.Add(this.ownRadioButton, 0, 6);
+            this.tableLayoutPanel4.Controls.Add(this.contrastRadioButton, 0, 5);
+            this.tableLayoutPanel4.Controls.Add(this.gammaRadioButton, 0, 4);
+            this.tableLayoutPanel4.Controls.Add(this.brightnessRadioButton, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.negationRadioButton, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.antifilterRadioButton, 0, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 377);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 6;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanel4.RowCount = 7;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(302, 368);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
@@ -210,69 +221,109 @@ namespace image_filtering
             // 
             this.eraseRadioButton.AutoSize = true;
             this.eraseRadioButton.Checked = true;
-            this.eraseRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.eraseRadioButton.Location = new System.Drawing.Point(3, 3);
             this.eraseRadioButton.Name = "eraseRadioButton";
-            this.eraseRadioButton.Size = new System.Drawing.Size(296, 55);
+            this.eraseRadioButton.Size = new System.Drawing.Size(144, 29);
             this.eraseRadioButton.TabIndex = 0;
             this.eraseRadioButton.TabStop = true;
             this.eraseRadioButton.Text = "erase filter";
             this.eraseRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // negationRadioButton
-            // 
-            this.negationRadioButton.AutoSize = true;
-            this.negationRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.negationRadioButton.Location = new System.Drawing.Point(3, 64);
-            this.negationRadioButton.Name = "negationRadioButton";
-            this.negationRadioButton.Size = new System.Drawing.Size(296, 55);
-            this.negationRadioButton.TabIndex = 1;
-            this.negationRadioButton.Text = "negation";
-            this.negationRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // brightnessRadioButton
-            // 
-            this.brightnessRadioButton.AutoSize = true;
-            this.brightnessRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.brightnessRadioButton.Location = new System.Drawing.Point(3, 125);
-            this.brightnessRadioButton.Name = "brightnessRadioButton";
-            this.brightnessRadioButton.Size = new System.Drawing.Size(296, 55);
-            this.brightnessRadioButton.TabIndex = 2;
-            this.brightnessRadioButton.Text = "change brightness";
-            this.brightnessRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // gammaRadioButton
-            // 
-            this.gammaRadioButton.AutoSize = true;
-            this.gammaRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gammaRadioButton.Location = new System.Drawing.Point(3, 186);
-            this.gammaRadioButton.Name = "gammaRadioButton";
-            this.gammaRadioButton.Size = new System.Drawing.Size(296, 55);
-            this.gammaRadioButton.TabIndex = 3;
-            this.gammaRadioButton.Text = "change gamma";
-            this.gammaRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // contrastRadioButton
-            // 
-            this.contrastRadioButton.AutoSize = true;
-            this.contrastRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contrastRadioButton.Location = new System.Drawing.Point(3, 247);
-            this.contrastRadioButton.Name = "contrastRadioButton";
-            this.contrastRadioButton.Size = new System.Drawing.Size(296, 55);
-            this.contrastRadioButton.TabIndex = 4;
-            this.contrastRadioButton.Text = "change contrast";
-            this.contrastRadioButton.UseVisualStyleBackColor = true;
+            this.eraseRadioButton.Click += new System.EventHandler(this.eraseRadioButton_Click);
             // 
             // ownRadioButton
             // 
             this.ownRadioButton.AutoSize = true;
-            this.ownRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ownRadioButton.Location = new System.Drawing.Point(3, 308);
+            this.ownRadioButton.Location = new System.Drawing.Point(3, 315);
             this.ownRadioButton.Name = "ownRadioButton";
-            this.ownRadioButton.Size = new System.Drawing.Size(296, 57);
+            this.ownRadioButton.Size = new System.Drawing.Size(164, 29);
             this.ownRadioButton.TabIndex = 5;
             this.ownRadioButton.Text = "own function";
             this.ownRadioButton.UseVisualStyleBackColor = true;
+            this.ownRadioButton.Click += new System.EventHandler(this.ownRadioButton_Click);
+            // 
+            // contrastRadioButton
+            // 
+            this.contrastRadioButton.AutoSize = true;
+            this.contrastRadioButton.Location = new System.Drawing.Point(3, 263);
+            this.contrastRadioButton.Name = "contrastRadioButton";
+            this.contrastRadioButton.Size = new System.Drawing.Size(197, 29);
+            this.contrastRadioButton.TabIndex = 4;
+            this.contrastRadioButton.Text = "change contrast";
+            this.contrastRadioButton.UseVisualStyleBackColor = true;
+            this.contrastRadioButton.Click += new System.EventHandler(this.contrastRadioButton_Click);
+            // 
+            // gammaRadioButton
+            // 
+            this.gammaRadioButton.AutoSize = true;
+            this.gammaRadioButton.Location = new System.Drawing.Point(3, 211);
+            this.gammaRadioButton.Name = "gammaRadioButton";
+            this.gammaRadioButton.Size = new System.Drawing.Size(190, 29);
+            this.gammaRadioButton.TabIndex = 3;
+            this.gammaRadioButton.Text = "change gamma";
+            this.gammaRadioButton.UseVisualStyleBackColor = true;
+            this.gammaRadioButton.Click += new System.EventHandler(this.gammaRadioButton_Click);
+            // 
+            // brightnessRadioButton
+            // 
+            this.brightnessRadioButton.AutoSize = true;
+            this.brightnessRadioButton.Location = new System.Drawing.Point(3, 159);
+            this.brightnessRadioButton.Name = "brightnessRadioButton";
+            this.brightnessRadioButton.Size = new System.Drawing.Size(220, 29);
+            this.brightnessRadioButton.TabIndex = 2;
+            this.brightnessRadioButton.Text = "change brightness";
+            this.brightnessRadioButton.UseVisualStyleBackColor = true;
+            this.brightnessRadioButton.Click += new System.EventHandler(this.brightnessRadioButton_Click);
+            // 
+            // negationRadioButton
+            // 
+            this.negationRadioButton.AutoSize = true;
+            this.negationRadioButton.Location = new System.Drawing.Point(3, 107);
+            this.negationRadioButton.Name = "negationRadioButton";
+            this.negationRadioButton.Size = new System.Drawing.Size(126, 29);
+            this.negationRadioButton.TabIndex = 1;
+            this.negationRadioButton.Text = "negation";
+            this.negationRadioButton.UseVisualStyleBackColor = true;
+            this.negationRadioButton.Click += new System.EventHandler(this.negationRadioButton_Click);
+            // 
+            // antifilterRadioButton
+            // 
+            this.antifilterRadioButton.AutoSize = true;
+            this.antifilterRadioButton.Location = new System.Drawing.Point(3, 55);
+            this.antifilterRadioButton.Name = "antifilterRadioButton";
+            this.antifilterRadioButton.Size = new System.Drawing.Size(114, 29);
+            this.antifilterRadioButton.TabIndex = 6;
+            this.antifilterRadioButton.TabStop = true;
+            this.antifilterRadioButton.Text = "nothing";
+            this.antifilterRadioButton.UseVisualStyleBackColor = true;
+            this.antifilterRadioButton.Click += new System.EventHandler(this.antifilterRadioButton_Click);
+            // 
+            // filterChart
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.filterChart.ChartAreas.Add(chartArea4);
+            this.filterChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filterChart.Location = new System.Drawing.Point(3, 751);
+            this.filterChart.Name = "filterChart";
+            this.filterChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
+            this.filterChart.PaletteCustomColors = new System.Drawing.Color[] {
+        System.Drawing.Color.Blue};
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series4.Name = "bezierPoints";
+            series4.YValuesPerPoint = 2;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Name = "filter";
+            series5.Points.Add(dataPoint7);
+            series5.Points.Add(dataPoint8);
+            this.filterChart.Series.Add(series4);
+            this.filterChart.Series.Add(series5);
+            this.filterChart.Size = new System.Drawing.Size(302, 369);
+            this.filterChart.TabIndex = 3;
+            this.filterChart.Text = "chart1";
+            this.filterChart.MouseDown += new System.Windows.Forms.MouseEventHandler(this.filterChart_MouseDown);
+            this.filterChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.filterChart_MouseMove);
+            this.filterChart.MouseUp += new System.Windows.Forms.MouseEventHandler(this.filterChart_MouseUp);
             // 
             // Form1
             // 
@@ -291,6 +342,7 @@ namespace image_filtering
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterChart)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -311,6 +363,8 @@ namespace image_filtering
         private System.Windows.Forms.RadioButton gammaRadioButton;
         private System.Windows.Forms.RadioButton contrastRadioButton;
         private System.Windows.Forms.RadioButton ownRadioButton;
+        private System.Windows.Forms.DataVisualization.Charting.Chart filterChart;
+        private System.Windows.Forms.RadioButton antifilterRadioButton;
     }
 }
 
