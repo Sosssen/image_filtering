@@ -101,7 +101,7 @@ namespace image_filtering
             filterChart.ChartAreas[0].CursorX.LineWidth = 0;
             filterChart.ChartAreas[0].CursorY.LineWidth = 0;
 
-
+            brightnessUpDown.Value = brightnessConst;
 
             InitializeFilterArrays();
 
@@ -111,35 +111,62 @@ namespace image_filtering
             LoadImage(filename);
         }
 
-        public void InitializeFilterArrays()
+        public void InitializeAntifilterArray()
         {
             for (int i = 0; i < antifilterArr.Length; i++)
             {
                 antifilterArr[i] = i;
             }
+        }
 
+        public void InitializeNegationArray()
+        {
             for (int i = 0; i < negationArr.Length; i++)
             {
                 negationArr[i] = 255 - i;
             }
+        }
 
-            for (int i = 0; i < brightnessConst; i++)
+        public void InitializeBrightnessArray()
+        {
+            if (brightnessConst >= 0)
             {
-                brightnessArr[i] = 0;
-            }
+                for (int i = 0; i < brightnessConst; i++)
+                {
+                    brightnessArr[i] = 0;
+                }
 
-            for (int i = brightnessConst; i < brightnessArr.Length; i++)
+                for (int i = brightnessConst; i < brightnessArr.Length; i++)
+                {
+                    brightnessArr[i] = i - brightnessConst;
+                }
+            }
+            else
             {
-                brightnessArr[i] = i - brightnessConst;
+                for (int i = 0; i < 255 + brightnessConst; i++)
+                {
+                    brightnessArr[i] = i - brightnessConst;
+                }
+                
+                for (int i = 255 + brightnessConst; i < brightnessArr.Length;  i++)
+                {
+                    brightnessArr[i] = 255;
+                }
             }
+        }
 
+        public void InitializeGammaArray()
+        {
             for (int i = 0; i < gammaArr.Length; i++)
             {
                 double tmp = (double)i / 255.0;
                 tmp = Math.Pow(tmp, gammaConst);
                 gammaArr[i] = (int)(tmp * 255);
             }
+        }
 
+        public void InitializeContrastArray()
+        {
             for (int i = 0; i < contrastConst; i++)
             {
                 contrastArr[i] = 0;
@@ -152,15 +179,26 @@ namespace image_filtering
                 currVal += h;
                 contrastArr[i] = Math.Min((int)currVal, 255);
             }
+        }
+
+        public void InitializeFilterArrays()
+        {
+            InitializeAntifilterArray();
+
+            InitializeNegationArray();
+
+            InitializeBrightnessArray();
+
+            InitializeGammaArray();
+
+            InitializeContrastArray();
 
             bezierPoints[0] = new MyPoint(0, 0);
             bezierPoints[1] = new MyPoint(50, 200);
             bezierPoints[2] = new MyPoint(200, 50);
             bezierPoints[3] = new MyPoint(255, 255);
 
-            CountBezier();
-
-
+            InitializeOwnArray();
         }
 
         public void LoadImage(string filename)
@@ -642,7 +680,7 @@ namespace image_filtering
                 filterChart.Series["bezierPoints"].Points.Clear();
                 filterChart.Series["filter"].Points.Clear();
 
-                CountBezier();
+                InitializeOwnArray();
 
                 for (int i = 0; i < ownArr.Length; i++)
                 {
@@ -658,7 +696,7 @@ namespace image_filtering
             }
         }
 
-        public void CountBezier()
+        public void InitializeOwnArray()
         {
             MyPoint V0 = bezierPoints[0];
             MyPoint V1 = bezierPoints[1];
@@ -986,6 +1024,13 @@ namespace image_filtering
                 }
                 Updatexbyslopeinv(ActiveEdgeTuple);
             }
+        }
+
+        private void brightnessUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            brightnessConst = (int)brightnessUpDown.Value;
+            InitializeBrightnessArray();
+            DrawFilterChart();
         }
     }
 

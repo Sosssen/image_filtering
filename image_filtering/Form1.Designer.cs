@@ -58,9 +58,10 @@ namespace image_filtering
             this.ownRadioButton = new System.Windows.Forms.RadioButton();
             this.contrastRadioButton = new System.Windows.Forms.RadioButton();
             this.gammaRadioButton = new System.Windows.Forms.RadioButton();
-            this.brightnessRadioButton = new System.Windows.Forms.RadioButton();
             this.negationRadioButton = new System.Windows.Forms.RadioButton();
             this.antifilterRadioButton = new System.Windows.Forms.RadioButton();
+            this.brightnessRadioButton = new System.Windows.Forms.RadioButton();
+            this.brightnessUpDown = new System.Windows.Forms.NumericUpDown();
             this.filterChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.loadButton = new System.Windows.Forms.Button();
@@ -75,6 +76,7 @@ namespace image_filtering
             ((System.ComponentModel.ISupportInitialize)(this.greenChart)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterChart)).BeginInit();
             this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
@@ -201,15 +203,17 @@ namespace image_filtering
             // 
             // tableLayoutPanel4
             // 
-            this.tableLayoutPanel4.ColumnCount = 1;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel4.Controls.Add(this.eraseRadioButton, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.ownRadioButton, 0, 6);
             this.tableLayoutPanel4.Controls.Add(this.contrastRadioButton, 0, 5);
             this.tableLayoutPanel4.Controls.Add(this.gammaRadioButton, 0, 4);
-            this.tableLayoutPanel4.Controls.Add(this.brightnessRadioButton, 0, 3);
             this.tableLayoutPanel4.Controls.Add(this.negationRadioButton, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.antifilterRadioButton, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.brightnessRadioButton, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.brightnessUpDown, 1, 3);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 377);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -268,17 +272,6 @@ namespace image_filtering
             this.gammaRadioButton.UseVisualStyleBackColor = true;
             this.gammaRadioButton.Click += new System.EventHandler(this.gammaRadioButton_Click);
             // 
-            // brightnessRadioButton
-            // 
-            this.brightnessRadioButton.AutoSize = true;
-            this.brightnessRadioButton.Location = new System.Drawing.Point(3, 159);
-            this.brightnessRadioButton.Name = "brightnessRadioButton";
-            this.brightnessRadioButton.Size = new System.Drawing.Size(220, 29);
-            this.brightnessRadioButton.TabIndex = 2;
-            this.brightnessRadioButton.Text = "change brightness";
-            this.brightnessRadioButton.UseVisualStyleBackColor = true;
-            this.brightnessRadioButton.Click += new System.EventHandler(this.brightnessRadioButton_Click);
-            // 
             // negationRadioButton
             // 
             this.negationRadioButton.AutoSize = true;
@@ -302,6 +295,36 @@ namespace image_filtering
             this.antifilterRadioButton.Text = "nothing";
             this.antifilterRadioButton.UseVisualStyleBackColor = true;
             this.antifilterRadioButton.Click += new System.EventHandler(this.antifilterRadioButton_Click);
+            // 
+            // brightnessRadioButton
+            // 
+            this.brightnessRadioButton.AutoSize = true;
+            this.brightnessRadioButton.Location = new System.Drawing.Point(3, 159);
+            this.brightnessRadioButton.Name = "brightnessRadioButton";
+            this.brightnessRadioButton.Size = new System.Drawing.Size(205, 29);
+            this.brightnessRadioButton.TabIndex = 2;
+            this.brightnessRadioButton.Text = "change brightness";
+            this.brightnessRadioButton.UseVisualStyleBackColor = true;
+            this.brightnessRadioButton.Click += new System.EventHandler(this.brightnessRadioButton_Click);
+            // 
+            // brightnessUpDown
+            // 
+            this.brightnessUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.brightnessUpDown.Location = new System.Drawing.Point(214, 159);
+            this.brightnessUpDown.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.brightnessUpDown.Minimum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            -2147483648});
+            this.brightnessUpDown.Name = "brightnessUpDown";
+            this.brightnessUpDown.Size = new System.Drawing.Size(85, 31);
+            this.brightnessUpDown.TabIndex = 7;
+            this.brightnessUpDown.ValueChanged += new System.EventHandler(this.brightnessUpDown_ValueChanged);
             // 
             // filterChart
             // 
@@ -411,6 +434,7 @@ namespace image_filtering
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brightnessUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterChart)).EndInit();
             this.tableLayoutPanel5.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -440,6 +464,7 @@ namespace image_filtering
         private System.Windows.Forms.Button fillButton;
         private System.Windows.Forms.Button brushButton;
         private System.Windows.Forms.Button rectangleButton;
+        private System.Windows.Forms.NumericUpDown brightnessUpDown;
     }
 }
 
