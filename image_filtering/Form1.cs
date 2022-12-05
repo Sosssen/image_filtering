@@ -101,7 +101,7 @@ namespace image_filtering
 
             DrawFilterChart();
 
-            string filename = @".\lib\landscape.png";
+            string filename = @".\lib\lenna.png";
             LoadImage(filename);
         }
 
@@ -454,12 +454,18 @@ namespace image_filtering
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-
             if (moving == 1)
             {
                 circles.Add(new Point(e.X, e.Y));
-                RedrawImage();
             }
+            RedrawImage();
+
+            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            {
+                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+            }
+            Canvas.Invalidate();
+            Canvas.Update();
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
@@ -468,18 +474,35 @@ namespace image_filtering
             {
                 moving = 1;
                 circles.Add(new Point(e.X, e.Y));
-                RedrawImage();
             }
+
+            RedrawImage();
+
+            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            {
+                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+            }
+            Canvas.Invalidate();
+            Canvas.Update();
         }
 
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
         {
             moving = 0;
 
+            RedrawImage();
+
             using(Graphics g = Graphics.FromImage(imageCopy.Bitmap))
             {
                 g.DrawImage(drawArea.Bitmap, 0, 0);
             }
+
+            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            {
+                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+            }
+            Canvas.Invalidate();
+            Canvas.Update();
 
             circles.Clear();
             RedrawImage();
