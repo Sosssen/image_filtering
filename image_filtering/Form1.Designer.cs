@@ -55,19 +55,26 @@ namespace image_filtering
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.eraseRadioButton = new System.Windows.Forms.RadioButton();
-            this.ownRadioButton = new System.Windows.Forms.RadioButton();
-            this.contrastRadioButton = new System.Windows.Forms.RadioButton();
             this.gammaRadioButton = new System.Windows.Forms.RadioButton();
             this.negationRadioButton = new System.Windows.Forms.RadioButton();
+            this.contrastUpDown = new System.Windows.Forms.NumericUpDown();
             this.antifilterRadioButton = new System.Windows.Forms.RadioButton();
             this.brightnessRadioButton = new System.Windows.Forms.RadioButton();
             this.brightnessUpDown = new System.Windows.Forms.NumericUpDown();
+            this.gammaUpDown = new System.Windows.Forms.NumericUpDown();
+            this.ownRadioButton = new System.Windows.Forms.RadioButton();
+            this.contrastRadioButton = new System.Windows.Forms.RadioButton();
+            this.contrastUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.contrastUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.filterChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.loadButton = new System.Windows.Forms.Button();
             this.fillButton = new System.Windows.Forms.Button();
-            this.brushButton = new System.Windows.Forms.Button();
             this.rectangleButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.brushButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.brushUpDown = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
@@ -76,9 +83,16 @@ namespace image_filtering
             ((System.ComponentModel.ISupportInitialize)(this.greenChart)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gammaUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterChart)).BeginInit();
             this.tableLayoutPanel5.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brushUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -106,6 +120,7 @@ namespace image_filtering
             this.Canvas.TabIndex = 0;
             this.Canvas.TabStop = false;
             this.Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseDown);
+            this.Canvas.MouseLeave += new System.EventHandler(this.Canvas_MouseLeave);
             this.Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseMove);
             this.Canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseUp);
             // 
@@ -119,11 +134,11 @@ namespace image_filtering
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(1261, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 4;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(310, 1123);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
@@ -132,7 +147,7 @@ namespace image_filtering
             chartArea1.Name = "ChartArea1";
             this.blueChart.ChartAreas.Add(chartArea1);
             this.blueChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.blueChart.Location = new System.Drawing.Point(3, 563);
+            this.blueChart.Location = new System.Drawing.Point(3, 751);
             this.blueChart.Name = "blueChart";
             this.blueChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             this.blueChart.PaletteCustomColors = new System.Drawing.Color[] {
@@ -142,7 +157,7 @@ namespace image_filtering
             series1.Points.Add(dataPoint1);
             series1.Points.Add(dataPoint2);
             this.blueChart.Series.Add(series1);
-            this.blueChart.Size = new System.Drawing.Size(304, 274);
+            this.blueChart.Size = new System.Drawing.Size(304, 369);
             this.blueChart.TabIndex = 2;
             this.blueChart.Text = "chart1";
             // 
@@ -161,7 +176,7 @@ namespace image_filtering
             series2.Points.Add(dataPoint3);
             series2.Points.Add(dataPoint4);
             this.redChart.Series.Add(series2);
-            this.redChart.Size = new System.Drawing.Size(304, 274);
+            this.redChart.Size = new System.Drawing.Size(304, 368);
             this.redChart.TabIndex = 0;
             this.redChart.Text = "chart1";
             // 
@@ -170,7 +185,7 @@ namespace image_filtering
             chartArea3.Name = "ChartArea1";
             this.greenChart.ChartAreas.Add(chartArea3);
             this.greenChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.greenChart.Location = new System.Drawing.Point(3, 283);
+            this.greenChart.Location = new System.Drawing.Point(3, 377);
             this.greenChart.Name = "greenChart";
             this.greenChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             this.greenChart.PaletteCustomColors = new System.Drawing.Color[] {
@@ -180,7 +195,7 @@ namespace image_filtering
             series3.Points.Add(dataPoint5);
             series3.Points.Add(dataPoint6);
             this.greenChart.Series.Add(series3);
-            this.greenChart.Size = new System.Drawing.Size(304, 274);
+            this.greenChart.Size = new System.Drawing.Size(304, 368);
             this.greenChart.TabIndex = 1;
             this.greenChart.Text = "chart1";
             // 
@@ -207,66 +222,52 @@ namespace image_filtering
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel4.Controls.Add(this.eraseRadioButton, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.ownRadioButton, 0, 6);
-            this.tableLayoutPanel4.Controls.Add(this.contrastRadioButton, 0, 5);
             this.tableLayoutPanel4.Controls.Add(this.gammaRadioButton, 0, 4);
             this.tableLayoutPanel4.Controls.Add(this.negationRadioButton, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.contrastUpDown, 1, 5);
             this.tableLayoutPanel4.Controls.Add(this.antifilterRadioButton, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.brightnessRadioButton, 0, 3);
             this.tableLayoutPanel4.Controls.Add(this.brightnessUpDown, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.gammaUpDown, 1, 4);
+            this.tableLayoutPanel4.Controls.Add(this.ownRadioButton, 0, 8);
+            this.tableLayoutPanel4.Controls.Add(this.contrastRadioButton, 0, 6);
+            this.tableLayoutPanel4.Controls.Add(this.contrastUpDown2, 1, 6);
+            this.tableLayoutPanel4.Controls.Add(this.contrastUpDown3, 1, 7);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 377);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 7;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel4.RowCount = 9;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(302, 368);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // eraseRadioButton
             // 
             this.eraseRadioButton.AutoSize = true;
+            this.eraseRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.eraseRadioButton.Location = new System.Drawing.Point(3, 3);
             this.eraseRadioButton.Name = "eraseRadioButton";
-            this.eraseRadioButton.Size = new System.Drawing.Size(144, 29);
+            this.eraseRadioButton.Size = new System.Drawing.Size(205, 34);
             this.eraseRadioButton.TabIndex = 0;
             this.eraseRadioButton.Text = "erase filter";
             this.eraseRadioButton.UseVisualStyleBackColor = true;
             this.eraseRadioButton.Click += new System.EventHandler(this.eraseRadioButton_Click);
             // 
-            // ownRadioButton
-            // 
-            this.ownRadioButton.AutoSize = true;
-            this.ownRadioButton.Location = new System.Drawing.Point(3, 315);
-            this.ownRadioButton.Name = "ownRadioButton";
-            this.ownRadioButton.Size = new System.Drawing.Size(164, 29);
-            this.ownRadioButton.TabIndex = 5;
-            this.ownRadioButton.Text = "own function";
-            this.ownRadioButton.UseVisualStyleBackColor = true;
-            this.ownRadioButton.Click += new System.EventHandler(this.ownRadioButton_Click);
-            // 
-            // contrastRadioButton
-            // 
-            this.contrastRadioButton.AutoSize = true;
-            this.contrastRadioButton.Location = new System.Drawing.Point(3, 263);
-            this.contrastRadioButton.Name = "contrastRadioButton";
-            this.contrastRadioButton.Size = new System.Drawing.Size(197, 29);
-            this.contrastRadioButton.TabIndex = 4;
-            this.contrastRadioButton.Text = "change contrast";
-            this.contrastRadioButton.UseVisualStyleBackColor = true;
-            this.contrastRadioButton.Click += new System.EventHandler(this.contrastRadioButton_Click);
-            // 
             // gammaRadioButton
             // 
             this.gammaRadioButton.AutoSize = true;
-            this.gammaRadioButton.Location = new System.Drawing.Point(3, 211);
+            this.gammaRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gammaRadioButton.Location = new System.Drawing.Point(3, 163);
             this.gammaRadioButton.Name = "gammaRadioButton";
-            this.gammaRadioButton.Size = new System.Drawing.Size(190, 29);
+            this.gammaRadioButton.Size = new System.Drawing.Size(205, 34);
             this.gammaRadioButton.TabIndex = 3;
             this.gammaRadioButton.Text = "change gamma";
             this.gammaRadioButton.UseVisualStyleBackColor = true;
@@ -275,21 +276,38 @@ namespace image_filtering
             // negationRadioButton
             // 
             this.negationRadioButton.AutoSize = true;
-            this.negationRadioButton.Location = new System.Drawing.Point(3, 107);
+            this.negationRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.negationRadioButton.Location = new System.Drawing.Point(3, 83);
             this.negationRadioButton.Name = "negationRadioButton";
-            this.negationRadioButton.Size = new System.Drawing.Size(126, 29);
+            this.negationRadioButton.Size = new System.Drawing.Size(205, 34);
             this.negationRadioButton.TabIndex = 1;
             this.negationRadioButton.Text = "negation";
             this.negationRadioButton.UseVisualStyleBackColor = true;
             this.negationRadioButton.Click += new System.EventHandler(this.negationRadioButton_Click);
             // 
+            // contrastUpDown
+            // 
+            this.contrastUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contrastUpDown.Enabled = false;
+            this.contrastUpDown.Location = new System.Drawing.Point(214, 203);
+            this.contrastUpDown.Maximum = new decimal(new int[] {
+            127,
+            0,
+            0,
+            0});
+            this.contrastUpDown.Name = "contrastUpDown";
+            this.contrastUpDown.Size = new System.Drawing.Size(85, 31);
+            this.contrastUpDown.TabIndex = 9;
+            this.contrastUpDown.ValueChanged += new System.EventHandler(this.contrastUpDown_ValueChanged);
+            // 
             // antifilterRadioButton
             // 
             this.antifilterRadioButton.AutoSize = true;
             this.antifilterRadioButton.Checked = true;
-            this.antifilterRadioButton.Location = new System.Drawing.Point(3, 55);
+            this.antifilterRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.antifilterRadioButton.Location = new System.Drawing.Point(3, 43);
             this.antifilterRadioButton.Name = "antifilterRadioButton";
-            this.antifilterRadioButton.Size = new System.Drawing.Size(114, 29);
+            this.antifilterRadioButton.Size = new System.Drawing.Size(205, 34);
             this.antifilterRadioButton.TabIndex = 6;
             this.antifilterRadioButton.TabStop = true;
             this.antifilterRadioButton.Text = "nothing";
@@ -299,9 +317,10 @@ namespace image_filtering
             // brightnessRadioButton
             // 
             this.brightnessRadioButton.AutoSize = true;
-            this.brightnessRadioButton.Location = new System.Drawing.Point(3, 159);
+            this.brightnessRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.brightnessRadioButton.Location = new System.Drawing.Point(3, 123);
             this.brightnessRadioButton.Name = "brightnessRadioButton";
-            this.brightnessRadioButton.Size = new System.Drawing.Size(205, 29);
+            this.brightnessRadioButton.Size = new System.Drawing.Size(205, 34);
             this.brightnessRadioButton.TabIndex = 2;
             this.brightnessRadioButton.Text = "change brightness";
             this.brightnessRadioButton.UseVisualStyleBackColor = true;
@@ -310,7 +329,8 @@ namespace image_filtering
             // brightnessUpDown
             // 
             this.brightnessUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.brightnessUpDown.Location = new System.Drawing.Point(214, 159);
+            this.brightnessUpDown.Enabled = false;
+            this.brightnessUpDown.Location = new System.Drawing.Point(214, 123);
             this.brightnessUpDown.Maximum = new decimal(new int[] {
             255,
             0,
@@ -325,6 +345,86 @@ namespace image_filtering
             this.brightnessUpDown.Size = new System.Drawing.Size(85, 31);
             this.brightnessUpDown.TabIndex = 7;
             this.brightnessUpDown.ValueChanged += new System.EventHandler(this.brightnessUpDown_ValueChanged);
+            // 
+            // gammaUpDown
+            // 
+            this.gammaUpDown.DecimalPlaces = 2;
+            this.gammaUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gammaUpDown.Enabled = false;
+            this.gammaUpDown.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.gammaUpDown.Location = new System.Drawing.Point(214, 163);
+            this.gammaUpDown.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.gammaUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.gammaUpDown.Name = "gammaUpDown";
+            this.gammaUpDown.Size = new System.Drawing.Size(85, 31);
+            this.gammaUpDown.TabIndex = 8;
+            this.gammaUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.gammaUpDown.ValueChanged += new System.EventHandler(this.gammaUpDown_ValueChanged);
+            // 
+            // ownRadioButton
+            // 
+            this.ownRadioButton.AutoSize = true;
+            this.ownRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ownRadioButton.Location = new System.Drawing.Point(3, 323);
+            this.ownRadioButton.Name = "ownRadioButton";
+            this.ownRadioButton.Size = new System.Drawing.Size(205, 42);
+            this.ownRadioButton.TabIndex = 5;
+            this.ownRadioButton.Text = "own function";
+            this.ownRadioButton.UseVisualStyleBackColor = true;
+            this.ownRadioButton.Click += new System.EventHandler(this.ownRadioButton_Click);
+            // 
+            // contrastRadioButton
+            // 
+            this.contrastRadioButton.AutoSize = true;
+            this.contrastRadioButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contrastRadioButton.Location = new System.Drawing.Point(3, 243);
+            this.contrastRadioButton.Name = "contrastRadioButton";
+            this.contrastRadioButton.Size = new System.Drawing.Size(205, 34);
+            this.contrastRadioButton.TabIndex = 4;
+            this.contrastRadioButton.Text = "change contrast";
+            this.contrastRadioButton.UseVisualStyleBackColor = true;
+            this.contrastRadioButton.Click += new System.EventHandler(this.contrastRadioButton_Click);
+            // 
+            // contrastUpDown2
+            // 
+            this.contrastUpDown2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contrastUpDown2.Enabled = false;
+            this.contrastUpDown2.Location = new System.Drawing.Point(214, 243);
+            this.contrastUpDown2.Name = "contrastUpDown2";
+            this.contrastUpDown2.Size = new System.Drawing.Size(85, 31);
+            this.contrastUpDown2.TabIndex = 10;
+            this.contrastUpDown2.ValueChanged += new System.EventHandler(this.contrastUpDown2_ValueChanged);
+            // 
+            // contrastUpDown3
+            // 
+            this.contrastUpDown3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contrastUpDown3.Enabled = false;
+            this.contrastUpDown3.Location = new System.Drawing.Point(214, 283);
+            this.contrastUpDown3.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.contrastUpDown3.Name = "contrastUpDown3";
+            this.contrastUpDown3.Size = new System.Drawing.Size(85, 31);
+            this.contrastUpDown3.TabIndex = 11;
+            this.contrastUpDown3.ValueChanged += new System.EventHandler(this.contrastUpDown3_ValueChanged);
             // 
             // filterChart
             // 
@@ -360,8 +460,8 @@ namespace image_filtering
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.Controls.Add(this.loadButton, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.fillButton, 0, 1);
-            this.tableLayoutPanel5.Controls.Add(this.brushButton, 0, 2);
             this.tableLayoutPanel5.Controls.Add(this.rectangleButton, 0, 3);
+            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 0, 2);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -395,17 +495,6 @@ namespace image_filtering
             this.fillButton.UseVisualStyleBackColor = true;
             this.fillButton.Click += new System.EventHandler(this.fillButton_Click);
             // 
-            // brushButton
-            // 
-            this.brushButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.brushButton.Location = new System.Drawing.Point(3, 187);
-            this.brushButton.Name = "brushButton";
-            this.brushButton.Size = new System.Drawing.Size(296, 86);
-            this.brushButton.TabIndex = 2;
-            this.brushButton.Text = "fill using brush";
-            this.brushButton.UseVisualStyleBackColor = true;
-            this.brushButton.Click += new System.EventHandler(this.brushButton_Click);
-            // 
             // rectangleButton
             // 
             this.rectangleButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -416,6 +505,72 @@ namespace image_filtering
             this.rectangleButton.Text = "fill using rectangle";
             this.rectangleButton.UseVisualStyleBackColor = true;
             this.rectangleButton.Click += new System.EventHandler(this.rectangleButton_Click);
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel6.Controls.Add(this.brushButton, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel7, 1, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 187);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(296, 86);
+            this.tableLayoutPanel6.TabIndex = 4;
+            // 
+            // brushButton
+            // 
+            this.brushButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.brushButton.Location = new System.Drawing.Point(3, 3);
+            this.brushButton.Name = "brushButton";
+            this.brushButton.Size = new System.Drawing.Size(230, 80);
+            this.brushButton.TabIndex = 2;
+            this.brushButton.Text = "fill using brush";
+            this.brushButton.UseVisualStyleBackColor = true;
+            this.brushButton.Click += new System.EventHandler(this.brushButton_Click);
+            // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.ColumnCount = 1;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel7.Controls.Add(this.brushUpDown, 0, 1);
+            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(239, 3);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 3;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(54, 80);
+            this.tableLayoutPanel7.TabIndex = 3;
+            // 
+            // brushUpDown
+            // 
+            this.brushUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.brushUpDown.Enabled = false;
+            this.brushUpDown.Location = new System.Drawing.Point(3, 29);
+            this.brushUpDown.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.brushUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.brushUpDown.Name = "brushUpDown";
+            this.brushUpDown.Size = new System.Drawing.Size(48, 31);
+            this.brushUpDown.TabIndex = 0;
+            this.brushUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.brushUpDown.ValueChanged += new System.EventHandler(this.brushUpDown_ValueChanged);
             // 
             // Form1
             // 
@@ -434,9 +589,16 @@ namespace image_filtering
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightnessUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gammaUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.contrastUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filterChart)).EndInit();
             this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.brushUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -465,6 +627,13 @@ namespace image_filtering
         private System.Windows.Forms.Button brushButton;
         private System.Windows.Forms.Button rectangleButton;
         private System.Windows.Forms.NumericUpDown brightnessUpDown;
+        private System.Windows.Forms.NumericUpDown gammaUpDown;
+        private System.Windows.Forms.NumericUpDown contrastUpDown;
+        private System.Windows.Forms.NumericUpDown contrastUpDown2;
+        private System.Windows.Forms.NumericUpDown contrastUpDown3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.NumericUpDown brushUpDown;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
     }
 }
 

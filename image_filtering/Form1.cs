@@ -29,6 +29,8 @@ namespace image_filtering
         private double gammaConst = 2.0;
         private int[] contrastArr = new int[256];
         private int contrastConst = 40;
+        private int contrastConst2 = 0;
+        private int contrastConst3 = 255;
         private int[] ownArr = new int[256];
         
 
@@ -63,8 +65,8 @@ namespace image_filtering
         public void Configuration()
         {
             Rectangle screen = Screen.PrimaryScreen.WorkingArea;
-            int w = (int)(screen.Width / 1.25);
-            int h = (int)(screen.Height / 1.25);
+            int w = (int)(screen.Width / 1.15);
+            int h = (int)(screen.Height / 1.15);
             this.Size = new Size(w, h);
 
             redChart.ChartAreas[0].AxisX.Minimum = -1;
@@ -102,6 +104,13 @@ namespace image_filtering
             filterChart.ChartAreas[0].CursorY.LineWidth = 0;
 
             brightnessUpDown.Value = brightnessConst;
+            gammaUpDown.Value = Convert.ToDecimal(gammaConst);
+            contrastUpDown.Value = contrastConst;
+            contrastUpDown2.Value = contrastConst2;
+            contrastUpDown3.Value = contrastConst3;
+            contrastUpDown2.Maximum = contrastUpDown3.Value - 1;
+            contrastUpDown3.Minimum = contrastUpDown2.Value + 1;
+            brushUpDown.Value = radius;
 
             InitializeFilterArrays();
 
@@ -131,27 +140,31 @@ namespace image_filtering
         {
             if (brightnessConst >= 0)
             {
-                for (int i = 0; i < brightnessConst; i++)
+                for (int i = 0; i < 255 - brightnessConst; i++)
+                {
+                    brightnessArr[i] = i + brightnessConst;
+                }
+
+                for (int i = 255 - brightnessConst; i < brightnessArr.Length; i++)
+                {
+                    brightnessArr[i] = 255;
+                }
+
+                
+            }
+            else
+            {
+
+                for (int i = 0; i < -brightnessConst; i++)
                 {
                     brightnessArr[i] = 0;
                 }
 
-                for (int i = brightnessConst; i < brightnessArr.Length; i++)
+                for (int i = -brightnessConst; i < brightnessArr.Length; i++)
                 {
-                    brightnessArr[i] = i - brightnessConst;
+                    brightnessArr[i] = i + brightnessConst;
                 }
-            }
-            else
-            {
-                for (int i = 0; i < 255 + brightnessConst; i++)
-                {
-                    brightnessArr[i] = i - brightnessConst;
-                }
-                
-                for (int i = 255 + brightnessConst; i < brightnessArr.Length;  i++)
-                {
-                    brightnessArr[i] = 255;
-                }
+
             }
         }
 
@@ -169,11 +182,11 @@ namespace image_filtering
         {
             for (int i = 0; i < contrastConst; i++)
             {
-                contrastArr[i] = 0;
-                contrastArr[contrastArr.Length - i - 1] = 255;
+                contrastArr[i] = contrastConst2;
+                contrastArr[contrastArr.Length - i - 1] = contrastConst3;
             }
-            double h = 255.0 / (255.0 - 2 * contrastConst);
-            double currVal = 0;
+            double h = (contrastConst3 - contrastConst2) / (255.0 - 2.0 * contrastConst);
+            double currVal = contrastConst2;
             for (int i = contrastConst; i < contrastArr.Length - contrastConst; i++)
             {
                 currVal += h;
@@ -607,36 +620,71 @@ namespace image_filtering
 
         private void eraseRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = false;
+            gammaUpDown.Enabled = false;
+            contrastUpDown.Enabled = false;
+            contrastUpDown2.Enabled = false;
+            contrastUpDown3.Enabled = false;
             DrawFilterChart();
         }
 
         private void negationRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = false;
+            gammaUpDown.Enabled = false;
+            contrastUpDown.Enabled = false;
+            contrastUpDown2.Enabled = false;
+            contrastUpDown3.Enabled = false;
             DrawFilterChart();
         }
 
         private void brightnessRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = true;
+            gammaUpDown.Enabled = false;
+            contrastUpDown.Enabled = false;
+            contrastUpDown2.Enabled = false;
+            contrastUpDown3.Enabled = false;
             DrawFilterChart();
         }
 
         private void gammaRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = false;
+            gammaUpDown.Enabled = true;
+            contrastUpDown.Enabled = false;
+            contrastUpDown2.Enabled = false;
+            contrastUpDown3.Enabled = false;
             DrawFilterChart();
         }
 
         private void contrastRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = false;
+            gammaUpDown.Enabled = false;
+            contrastUpDown.Enabled = true;
+            contrastUpDown2.Enabled = true;
+            contrastUpDown3.Enabled = true;
             DrawFilterChart();
         }
 
         private void antifilterRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = false;
+            gammaUpDown.Enabled = false;
+            contrastUpDown.Enabled = false;
+            contrastUpDown2.Enabled = false;
+            contrastUpDown3.Enabled = false;
             DrawFilterChart();
         }
 
         private void ownRadioButton_Click(object sender, EventArgs e)
         {
+            brightnessUpDown.Enabled = false;
+            gammaUpDown.Enabled = false;
+            contrastUpDown.Enabled = false;
+            contrastUpDown2.Enabled = false;
+            contrastUpDown3.Enabled = false;
             DrawFilterChart();
         }
 
@@ -747,6 +795,7 @@ namespace image_filtering
 
         private void fillButton_Click(object sender, EventArgs e)
         {
+            brushUpDown.Enabled = false;
             mode = 0;
 
             for (int i = 0; i < drawArea.Height; i++)
@@ -774,12 +823,14 @@ namespace image_filtering
 
         private void brushButton_Click(object sender, EventArgs e)
         {
+            brushUpDown.Enabled = true;
             mode = 1;
             RedrawImage();
         }
 
         private void rectangleButton_Click(object sender, EventArgs e)
         {
+            brushUpDown.Enabled = false;
             points.Clear();
             mode = 2;
             RedrawImage();
@@ -1031,6 +1082,46 @@ namespace image_filtering
             brightnessConst = (int)brightnessUpDown.Value;
             InitializeBrightnessArray();
             DrawFilterChart();
+        }
+
+        private void gammaUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            gammaConst = (double)gammaUpDown.Value;
+            InitializeGammaArray();
+            DrawFilterChart();
+        }
+
+        private void contrastUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            contrastConst = (int)contrastUpDown.Value;
+            InitializeContrastArray();
+            DrawFilterChart();
+        }
+
+        private void contrastUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            contrastUpDown3.Minimum = contrastUpDown2.Value + 1;
+            contrastConst2 = (int)contrastUpDown2.Value;
+            InitializeContrastArray();
+            DrawFilterChart();
+        }
+
+        private void contrastUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            contrastUpDown2.Maximum = contrastUpDown3.Value - 1;
+            contrastConst3 = (int)contrastUpDown3.Value;
+            InitializeContrastArray();
+            DrawFilterChart();
+        }
+
+        private void brushUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            radius = (int)brushUpDown.Value;
+        }
+
+        private void Canvas_MouseLeave(object sender, EventArgs e)
+        {
+            RedrawImage(-1, -1);
         }
     }
 
