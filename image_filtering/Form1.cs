@@ -14,6 +14,8 @@ namespace image_filtering
 {
     public partial class Form1 : Form
     {
+        private int mode = 0; // 0 - fill whole image, 1 - fill with brush, 2 - fill with polygon
+
         private DirectBitmap drawArea = null;
         private DirectBitmap imageCopy = null;
         private DirectBitmap imageBackup = null;
@@ -36,6 +38,7 @@ namespace image_filtering
         private int[] histogramBlue = new int[histogramSize];
 
         private Pen pen = new Pen(Color.Black, 1);
+        private SolidBrush sbBlack = new SolidBrush(Color.Black);
         private Pen penRed = new Pen(Color.Red, 1);
         private SolidBrush sbRed = new SolidBrush(Color.Red);
         private int radius = 30;
@@ -47,6 +50,9 @@ namespace image_filtering
         private bool movingBezier = false;
         private int bezierIndex = 0;
         private int bezierRadius = 5;
+
+        private List<MyPoint> points = new List<MyPoint>();
+        private int pointRadius = 3;
         public Form1()
         {
             InitializeComponent();
@@ -185,7 +191,7 @@ namespace image_filtering
             CountHistogram();
         }
 
-        public void RedrawImage()
+        public void RedrawImage(int x = -1, int y = -1)
         {
             using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
             {
@@ -193,6 +199,33 @@ namespace image_filtering
                 foreach (var point in circles)
                 {
                     midPointCircleDraw(drawArea, point.X, point.Y, radius, Color.Red);
+                }
+            }
+
+            if (mode == 1 && x != -1 && y != -1)
+            {
+                using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+                {
+                    g.DrawEllipse(pen, x - radius, y - radius, 2 * radius, 2 * radius);
+                }
+            }
+            else if (mode == 2 && x != -1 && y != -1)
+            {
+                using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+                {
+                    for (int i = 0; i < points.Count - 1; i++)
+                    {
+                        g.DrawLine(pen, points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+                    }
+                    if (points.Count > 0)
+                    {
+                        g.DrawLine(pen, points[points.Count - 1].x, points[points.Count - 1].y, x, y);
+                    }
+                    foreach (var point in points)
+                    {
+                        g.DrawEllipse(pen, point.x - pointRadius, point.y - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                        g.FillEllipse(sbBlack, point.x - 3, point.y - 3, 2 * 3, 2 * 3);
+                    }
                 }
             }
 
@@ -377,7 +410,7 @@ namespace image_filtering
             {
                 for (int j = 0; j < drawArea.Width; j++)
                 {
-                    Color color = drawArea.GetPixel(i, j);
+                    Color color = imageCopy.GetPixel(i, j);
                     histogramRed[color.R]++;
                     histogramGreen[color.G]++;
                     histogramBlue[color.B]++;
@@ -454,36 +487,66 @@ namespace image_filtering
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (moving == 1)
+            if (mode == 1)
             {
-                circles.Add(new Point(e.X, e.Y));
+                if (moving == 1)
+                {
+                    circles.Add(new Point(e.X, e.Y));
+                }
+                RedrawImage(e.X, e.Y);
             }
-            RedrawImage();
-
-            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+            else if (mode == 2)
             {
-                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                RedrawImage(e.X, e.Y);
             }
-            Canvas.Invalidate();
-            Canvas.Update();
         }
 
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                moving = 1;
-                circles.Add(new Point(e.X, e.Y));
+                if (mode == 1)
+                {
+                    moving = 1;
+                    circles.Add(new Point(e.X, e.Y));
+
+                    RedrawImage(e.X, e.Y);
+                }
+                else if (mode == 2)
+                {
+                    foreach (var point in points)
+                    {
+                        if ((point.x - e.X) * (point.x - e.X) + (point.y - e.Y) * (point.y - e.Y) <= pointRadius * pointRadius)
+                        {
+                            if (point != points[0])
+                            {
+                                MessageBox.Show("You can connect only with first node!", null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                DrawRectangle(points);
+                                points.Clear();
+                                RedrawImage(-1, -1);
+                            }
+                            return;
+                        }
+                    }
+                    points.Add(new MyPoint(e.X, e.Y));
+                    RedrawImage(e.X, e.Y);
+                }
             }
+        }
 
-            RedrawImage();
-
-            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
+        public void DrawRectangle(List<MyPoint> points)
+        {
+            Polygon polygon = new Polygon();
+            polygon.points = points;
+            polygon.edges = new List<Edge>();
+            for (int i = 0; i < points.Count; i++)
             {
-                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
+                polygon.edges.Add(new Edge(points[i], points[(i + 1) % points.Count]));
             }
-            Canvas.Invalidate();
-            Canvas.Update();
+            ScanlineFill(polygon);
         }
 
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
@@ -492,20 +555,14 @@ namespace image_filtering
 
             RedrawImage();
 
-            using(Graphics g = Graphics.FromImage(imageCopy.Bitmap))
+            using (Graphics g = Graphics.FromImage(imageCopy.Bitmap))
             {
                 g.DrawImage(drawArea.Bitmap, 0, 0);
             }
 
-            using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
-            {
-                g.DrawEllipse(pen, e.X - radius, e.Y - radius, 2 * radius, 2 * radius);
-            }
-            Canvas.Invalidate();
-            Canvas.Update();
-
+            // TODO: dont count rectangle points in histograms
             circles.Clear();
-            RedrawImage();
+            RedrawImage(e.X, e.Y);
             CountHistogram();
             
         }
@@ -556,7 +613,7 @@ namespace image_filtering
             for (int i = 0; i < bezierPoints.Length; i++)
             {
                 var point = bezierPoints[i];
-                if ((point.x - px) * (point.x - px) + (point.y - py) * (point.y - py) < bezierRadius * bezierRadius)
+                if ((point.x - px) * (point.x - px) + (point.y - py) * (point.y - py) <= bezierRadius * bezierRadius)
                 {
                     movingBezier = true;
                     bezierIndex = i;
@@ -652,6 +709,8 @@ namespace image_filtering
 
         private void fillButton_Click(object sender, EventArgs e)
         {
+            mode = 0;
+
             for (int i = 0; i < drawArea.Height; i++)
             {
                 for (int j = 0; j < drawArea.Width; j++)
@@ -672,6 +731,260 @@ namespace image_filtering
             {
                 string filename = ofd.FileName;
                 LoadImage(filename);
+            }
+        }
+
+        private void brushButton_Click(object sender, EventArgs e)
+        {
+            mode = 1;
+            RedrawImage();
+        }
+
+        private void rectangleButton_Click(object sender, EventArgs e)
+        {
+            points.Clear();
+            mode = 2;
+            RedrawImage();
+        }
+
+        private static readonly int maxVer = 100;
+        private static int maxHt = 1000;
+        private static int minY;
+        private static int maxY;
+
+        public class EdgeBucket
+        {
+            public int ymax;
+            public double xofymin;
+            public double slopeinverse;
+        }
+
+        public class EdgeTableTuple
+        {
+            public int countEdgeBucket;
+            public EdgeBucket[] buckets = new EdgeBucket[maxVer];
+        }
+
+        private static EdgeTableTuple[] edgeTable;
+        public static EdgeTableTuple ActiveEdgeTuple = new EdgeTableTuple();
+
+        public static EdgeTableTuple[] EdgeTable { get => edgeTable; set => edgeTable = value; }
+
+        public static void InitEdgeTable()
+        {
+            maxHt = maxY - minY + 1;
+            EdgeTable = new EdgeTableTuple[maxHt];
+            for (int i = 0; i < maxHt; i++)
+            {
+                EdgeTable[i] = new EdgeTableTuple();
+                EdgeTable[i].countEdgeBucket = 0;
+                for (int j = 0; j < maxVer; j++)
+                {
+                    EdgeTable[i].buckets[j] = new EdgeBucket();
+                }
+            }
+            for (int i = 0; i < maxVer; i++)
+            {
+                ActiveEdgeTuple.buckets[i] = new EdgeBucket();
+            }
+            ActiveEdgeTuple.countEdgeBucket = 0;
+        }
+
+        static void InsertionSort(EdgeTableTuple ett)
+        {
+            int i, j;
+            EdgeBucket temp = new EdgeBucket();
+
+            for (i = 1; i < ett.countEdgeBucket; i++)
+            {
+                temp.ymax = ett.buckets[i].ymax;
+                temp.xofymin = ett.buckets[i].xofymin;
+                temp.slopeinverse = ett.buckets[i].slopeinverse;
+                j = i - 1;
+                while ((j >= 0) && (temp.xofymin < ett.buckets[j].xofymin))
+                {
+                    ett.buckets[j + 1].ymax = ett.buckets[j].ymax;
+                    ett.buckets[j + 1].xofymin = ett.buckets[j].xofymin;
+                    ett.buckets[j + 1].slopeinverse = ett.buckets[j].slopeinverse;
+                    j--;
+                }
+                ett.buckets[j + 1].ymax = temp.ymax;
+                ett.buckets[j + 1].xofymin = temp.xofymin;
+                ett.buckets[j + 1].slopeinverse = temp.slopeinverse;
+            }
+        }
+
+        public static void StoreEdgeInTuple(EdgeTableTuple receiver, int ym, int xm, double slopInv)
+        {
+            receiver.buckets[receiver.countEdgeBucket].ymax = ym;
+            receiver.buckets[receiver.countEdgeBucket].xofymin = (double)xm;
+            receiver.buckets[receiver.countEdgeBucket].slopeinverse = slopInv;
+
+            InsertionSort(receiver);
+
+            receiver.countEdgeBucket++;
+        }
+
+        public static void StoreEdgeInTable(int x1, int y1, int x2, int y2)
+        {
+            double m, minv;
+            int ymaxTS, xwithyminTS, scanline;
+
+            if (x2 == x1)
+            {
+                minv = 0.0;
+            }
+            else
+            {
+                m = ((double)(y2 - y1)) / ((double)(x2 - x1));
+                if (y2 == y1) return;
+
+                minv = (double)(1.0 / m);
+            }
+
+            if (y1 > y2)
+            {
+                scanline = y2;
+                ymaxTS = y1;
+                xwithyminTS = x2;
+            }
+            else
+            {
+                scanline = y1;
+                ymaxTS = y2;
+                xwithyminTS = x1;
+            }
+
+            StoreEdgeInTuple(EdgeTable[scanline - minY], ymaxTS, xwithyminTS, minv);
+        }
+
+        public static void RemoveEdgeByYmax(EdgeTableTuple Tup, int yy)
+        {
+            int i, j;
+            for (i = 0; i < Tup.countEdgeBucket; i++)
+            {
+                if (Tup.buckets[i].ymax == yy)
+                {
+                    for (j = i; j < Tup.countEdgeBucket - 1; j++)
+                    {
+                        Tup.buckets[j].ymax = Tup.buckets[j + 1].ymax;
+                        Tup.buckets[j].xofymin = Tup.buckets[j + 1].xofymin;
+                        Tup.buckets[j].slopeinverse = Tup.buckets[j + 1].slopeinverse;
+                    }
+                    Tup.countEdgeBucket--;
+                    i--;
+                }
+            }
+        }
+
+        public static void Updatexbyslopeinv(EdgeTableTuple Tup)
+        {
+            int i;
+
+            for (i = 0; i < Tup.countEdgeBucket; i++)
+            {
+                Tup.buckets[i].xofymin = Tup.buckets[i].xofymin + Tup.buckets[i].slopeinverse;
+            }
+        }
+
+        public void ScanlineFill(Polygon polygon)
+        {
+            minY = int.MaxValue;
+            maxY = int.MinValue;
+
+            foreach (var edge in polygon.edges)
+            {
+                if (edge.src.y < minY) minY = (int)edge.src.y;
+                if (edge.src.y > maxY) maxY = (int)edge.src.y;
+                if (edge.dst.y < minY) minY = (int)edge.dst.y;
+                if (edge.dst.y > maxY) maxY = (int)edge.dst.y;
+            }
+
+            InitEdgeTable();
+
+            foreach (var edge in polygon.edges)
+            {
+                StoreEdgeInTable((int)edge.src.x, (int)edge.src.y, (int)edge.dst.x, (int)edge.dst.y);
+            }
+
+            int i, j, x1, ymax1, x2, ymax2, coordCount;
+            for (i = 0; i < maxHt; i++)
+            {
+                for (j = 0; j < EdgeTable[i].countEdgeBucket; j++)
+                {
+                    StoreEdgeInTuple(ActiveEdgeTuple, EdgeTable[i].buckets[j].ymax, (int)EdgeTable[i].buckets[j].xofymin, EdgeTable[i].buckets[j].slopeinverse);
+                }
+
+                RemoveEdgeByYmax(ActiveEdgeTuple, i + minY);
+
+                InsertionSort(ActiveEdgeTuple);
+
+                j = 0;
+                coordCount = 0;
+                x1 = 0;
+                x2 = 0;
+                ymax1 = 0;
+                ymax2 = 0;
+                while (j < ActiveEdgeTuple.countEdgeBucket)
+                {
+                    if (coordCount % 2 == 0)
+                    {
+                        x1 = (int)(ActiveEdgeTuple.buckets[j].xofymin);
+                        ymax1 = ActiveEdgeTuple.buckets[j].ymax;
+                        if (x1 == x2)
+                        {
+                            if (((x1 == ymax1) && (x2 != ymax2)) || ((x1 != ymax1) && (x2 == ymax2)))
+                            {
+                                x2 = x1;
+                                ymax2 = ymax1;
+                            }
+                            else
+                            {
+                                coordCount++;
+                            }
+                        }
+                        else
+                        {
+                            coordCount++;
+                        }
+                    }
+                    else
+                    {
+                        x2 = (int)ActiveEdgeTuple.buckets[j].xofymin;
+                        ymax2 = ActiveEdgeTuple.buckets[j].ymax;
+
+                        int FillFlag = 0;
+
+                        if (x1 == x2)
+                        {
+                            if (((x1 == ymax1) && (x2 != ymax2)) || ((x1 != ymax1) && (x2 == ymax2)))
+                            {
+                                x1 = x2;
+                                ymax1 = ymax2;
+                            }
+                            else
+                            {
+                                coordCount++;
+                                FillFlag = 1;
+                            }
+                        }
+                        else
+                        {
+                            coordCount++;
+                            FillFlag = 1;
+                        }
+
+                        if (FillFlag == 1)
+                        {
+                            for (int k = x1; k <= x2; k++)
+                            {
+                                imageCopy.SetPixel(k, i + minY, GetColor(k, i + minY));
+                            }
+                        }
+                    }
+                    j++;
+                }
+                Updatexbyslopeinv(ActiveEdgeTuple);
             }
         }
     }
@@ -730,6 +1043,39 @@ namespace image_filtering
         {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    public class Polygon
+    {
+        public List<MyPoint> points;
+        public List<Edge> edges;
+        public int size;
+
+        public Polygon()
+        {
+            this.points = null;
+            this.edges = null;
+            this.size = 0;
+        }
+
+        public Polygon(List<MyPoint> points, List<Edge> edges, int size)
+        {
+            this.points = points;
+            this.edges = edges;
+            this.size = size;
+        }
+    }
+
+    public class Edge
+    {
+        public MyPoint src;
+        public MyPoint dst;
+
+        public Edge(MyPoint src, MyPoint dst)
+        {
+            this.src = src;
+            this.dst = dst;
         }
     }
 }

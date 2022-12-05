@@ -381,6 +381,7 @@ namespace image_filtering
             this.brushButton.TabIndex = 2;
             this.brushButton.Text = "fill using brush";
             this.brushButton.UseVisualStyleBackColor = true;
+            this.brushButton.Click += new System.EventHandler(this.brushButton_Click);
             // 
             // rectangleButton
             // 
@@ -391,6 +392,7 @@ namespace image_filtering
             this.rectangleButton.TabIndex = 3;
             this.rectangleButton.Text = "fill using rectangle";
             this.rectangleButton.UseVisualStyleBackColor = true;
+            this.rectangleButton.Click += new System.EventHandler(this.rectangleButton_Click);
             // 
             // Form1
             // 
