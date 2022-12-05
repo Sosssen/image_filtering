@@ -610,6 +610,16 @@ namespace image_filtering
                 if (ty > 255) ty = 255;
                 ownArr[(int)Math.Round(tx, 0)] = (int)Math.Round(ty, 0);
             }
+
+            for (int i = 0; i < ownArr.Length; i++)
+            {
+                if (ownArr[i] == -1)
+                {
+                    if (i == 0) ownArr[i] = ownArr[i + 1];
+                    else if (i == 255) ownArr[i] = ownArr[i - 1];
+                    else ownArr[i] = (ownArr[i - 1] + ownArr[i + 1]) / 2;
+                }
+            }
         }
 
         private void filterChart_MouseUp(object sender, MouseEventArgs e)

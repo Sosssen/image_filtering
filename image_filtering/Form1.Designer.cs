@@ -220,12 +220,10 @@ namespace image_filtering
             // eraseRadioButton
             // 
             this.eraseRadioButton.AutoSize = true;
-            this.eraseRadioButton.Checked = true;
             this.eraseRadioButton.Location = new System.Drawing.Point(3, 3);
             this.eraseRadioButton.Name = "eraseRadioButton";
             this.eraseRadioButton.Size = new System.Drawing.Size(144, 29);
             this.eraseRadioButton.TabIndex = 0;
-            this.eraseRadioButton.TabStop = true;
             this.eraseRadioButton.Text = "erase filter";
             this.eraseRadioButton.UseVisualStyleBackColor = true;
             this.eraseRadioButton.Click += new System.EventHandler(this.eraseRadioButton_Click);
@@ -288,6 +286,7 @@ namespace image_filtering
             // antifilterRadioButton
             // 
             this.antifilterRadioButton.AutoSize = true;
+            this.antifilterRadioButton.Checked = true;
             this.antifilterRadioButton.Location = new System.Drawing.Point(3, 55);
             this.antifilterRadioButton.Name = "antifilterRadioButton";
             this.antifilterRadioButton.Size = new System.Drawing.Size(114, 29);
