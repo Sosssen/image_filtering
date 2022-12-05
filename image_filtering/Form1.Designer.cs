@@ -359,6 +359,7 @@ namespace image_filtering
             this.loadButton.TabIndex = 0;
             this.loadButton.Text = "load file";
             this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
             // fillButton
             // 

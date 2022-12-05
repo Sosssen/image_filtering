@@ -639,6 +639,18 @@ namespace image_filtering
             RedrawImage();
             CountHistogram();
         }
+
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Environment.CurrentDirectory + @".\lib";
+            DialogResult result = ofd.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string filename = ofd.FileName;
+                LoadImage(filename);
+            }
+        }
     }
 
     public class DirectBitmap : IDisposable
