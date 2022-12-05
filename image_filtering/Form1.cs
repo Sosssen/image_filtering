@@ -373,9 +373,9 @@ namespace image_filtering
             Array.Clear(histogramGreen, 0, histogramSize);
             Array.Clear(histogramBlue, 0, histogramSize);
 
-            for (int i = 0; i < drawArea.Width; i++)
+            for (int i = 0; i < drawArea.Height; i++)
             {
-                for (int j = 0; j < drawArea.Height; j++)
+                for (int j = 0; j < drawArea.Width; j++)
                 {
                     Color color = drawArea.GetPixel(i, j);
                     histogramRed[color.R]++;
@@ -625,6 +625,19 @@ namespace image_filtering
         private void filterChart_MouseUp(object sender, MouseEventArgs e)
         {
             movingBezier = false;
+        }
+
+        private void fillButton_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < drawArea.Height; i++)
+            {
+                for (int j = 0; j < drawArea.Width; j++)
+                {
+                    imageCopy.SetPixel(i, j, GetColor(i, j));
+                }
+            }
+            RedrawImage();
+            CountHistogram();
         }
     }
 

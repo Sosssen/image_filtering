@@ -62,6 +62,11 @@ namespace image_filtering
             this.negationRadioButton = new System.Windows.Forms.RadioButton();
             this.antifilterRadioButton = new System.Windows.Forms.RadioButton();
             this.filterChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.fillButton = new System.Windows.Forms.Button();
+            this.brushButton = new System.Windows.Forms.Button();
+            this.rectangleButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
@@ -71,6 +76,7 @@ namespace image_filtering
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filterChart)).BeginInit();
+            this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -182,6 +188,7 @@ namespace image_filtering
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.filterChart, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(947, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -324,6 +331,66 @@ namespace image_filtering
             this.filterChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.filterChart_MouseMove);
             this.filterChart.MouseUp += new System.Windows.Forms.MouseEventHandler(this.filterChart_MouseUp);
             // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Controls.Add(this.loadButton, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.fillButton, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.brushButton, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.rectangleButton, 0, 3);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 4;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(302, 368);
+            this.tableLayoutPanel5.TabIndex = 4;
+            // 
+            // loadButton
+            // 
+            this.loadButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.loadButton.Location = new System.Drawing.Point(3, 3);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(296, 86);
+            this.loadButton.TabIndex = 0;
+            this.loadButton.Text = "load file";
+            this.loadButton.UseVisualStyleBackColor = true;
+            // 
+            // fillButton
+            // 
+            this.fillButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fillButton.Location = new System.Drawing.Point(3, 95);
+            this.fillButton.Name = "fillButton";
+            this.fillButton.Size = new System.Drawing.Size(296, 86);
+            this.fillButton.TabIndex = 1;
+            this.fillButton.Text = "fill whole image";
+            this.fillButton.UseVisualStyleBackColor = true;
+            this.fillButton.Click += new System.EventHandler(this.fillButton_Click);
+            // 
+            // brushButton
+            // 
+            this.brushButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.brushButton.Location = new System.Drawing.Point(3, 187);
+            this.brushButton.Name = "brushButton";
+            this.brushButton.Size = new System.Drawing.Size(296, 86);
+            this.brushButton.TabIndex = 2;
+            this.brushButton.Text = "fill using brush";
+            this.brushButton.UseVisualStyleBackColor = true;
+            // 
+            // rectangleButton
+            // 
+            this.rectangleButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rectangleButton.Location = new System.Drawing.Point(3, 279);
+            this.rectangleButton.Name = "rectangleButton";
+            this.rectangleButton.Size = new System.Drawing.Size(296, 86);
+            this.rectangleButton.TabIndex = 3;
+            this.rectangleButton.Text = "fill using rectangle";
+            this.rectangleButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -342,6 +409,7 @@ namespace image_filtering
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filterChart)).EndInit();
+            this.tableLayoutPanel5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -364,6 +432,11 @@ namespace image_filtering
         private System.Windows.Forms.RadioButton ownRadioButton;
         private System.Windows.Forms.DataVisualization.Charting.Chart filterChart;
         private System.Windows.Forms.RadioButton antifilterRadioButton;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.Button fillButton;
+        private System.Windows.Forms.Button brushButton;
+        private System.Windows.Forms.Button rectangleButton;
     }
 }
 
