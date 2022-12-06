@@ -26,7 +26,7 @@ namespace image_filtering
         private int[] brightnessArr = new int[256];
         private int brightnessConst = 30;
         private int[] gammaArr = new int[256];
-        private double gammaConst = 2.0;
+        private double gammaConst = 0.5;
         private int[] contrastArr = new int[256];
         private int contrastConst = 40;
         private int contrastConst2 = 0;
@@ -64,6 +64,9 @@ namespace image_filtering
 
         public void Configuration()
         {
+            this.Text = "Image Filtering";
+            this.Icon = Properties.Resources.icon_if;
+
             Rectangle screen = Screen.PrimaryScreen.WorkingArea;
             int w = (int)(screen.Width / 1.15);
             int h = (int)(screen.Height / 1.15);
