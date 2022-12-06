@@ -69,13 +69,17 @@ namespace image_filtering
             this.contrastUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.filterChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.loadButton = new System.Windows.Forms.Button();
             this.fillButton = new System.Windows.Forms.Button();
             this.rectangleButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.brushButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.brushUpDown = new System.Windows.Forms.NumericUpDown();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.generateButton = new System.Windows.Forms.Button();
+            this.sTrackBar = new System.Windows.Forms.TrackBar();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
@@ -94,6 +98,9 @@ namespace image_filtering
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.brushUpDown)).BeginInit();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -463,38 +470,27 @@ namespace image_filtering
             // 
             this.tableLayoutPanel5.ColumnCount = 1;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.loadButton, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.fillButton, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this.rectangleButton, 0, 3);
             this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel8, 0, 0);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 4;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(302, 368);
             this.tableLayoutPanel5.TabIndex = 4;
-            // 
-            // loadButton
-            // 
-            this.loadButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.loadButton.Location = new System.Drawing.Point(3, 3);
-            this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(296, 86);
-            this.loadButton.TabIndex = 0;
-            this.loadButton.Text = "load file";
-            this.loadButton.UseVisualStyleBackColor = true;
-            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
             // fillButton
             // 
             this.fillButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fillButton.Location = new System.Drawing.Point(3, 95);
+            this.fillButton.Location = new System.Drawing.Point(3, 150);
             this.fillButton.Name = "fillButton";
-            this.fillButton.Size = new System.Drawing.Size(296, 86);
+            this.fillButton.Size = new System.Drawing.Size(296, 67);
             this.fillButton.TabIndex = 1;
             this.fillButton.Text = "fill whole image";
             this.fillButton.UseVisualStyleBackColor = true;
@@ -503,9 +499,9 @@ namespace image_filtering
             // rectangleButton
             // 
             this.rectangleButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rectangleButton.Location = new System.Drawing.Point(3, 279);
+            this.rectangleButton.Location = new System.Drawing.Point(3, 296);
             this.rectangleButton.Name = "rectangleButton";
-            this.rectangleButton.Size = new System.Drawing.Size(296, 86);
+            this.rectangleButton.Size = new System.Drawing.Size(296, 69);
             this.rectangleButton.TabIndex = 3;
             this.rectangleButton.Text = "fill using rectangle";
             this.rectangleButton.UseVisualStyleBackColor = true;
@@ -519,11 +515,11 @@ namespace image_filtering
             this.tableLayoutPanel6.Controls.Add(this.brushButton, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel7, 1, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 187);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 223);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(296, 86);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(296, 67);
             this.tableLayoutPanel6.TabIndex = 4;
             // 
             // brushButton
@@ -531,7 +527,7 @@ namespace image_filtering
             this.brushButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.brushButton.Location = new System.Drawing.Point(3, 3);
             this.brushButton.Name = "brushButton";
-            this.brushButton.Size = new System.Drawing.Size(230, 80);
+            this.brushButton.Size = new System.Drawing.Size(230, 61);
             this.brushButton.TabIndex = 2;
             this.brushButton.Text = "fill using brush";
             this.brushButton.UseVisualStyleBackColor = true;
@@ -549,14 +545,14 @@ namespace image_filtering
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(54, 80);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(54, 61);
             this.tableLayoutPanel7.TabIndex = 3;
             // 
             // brushUpDown
             // 
             this.brushUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.brushUpDown.Enabled = false;
-            this.brushUpDown.Location = new System.Drawing.Point(3, 29);
+            this.brushUpDown.Location = new System.Drawing.Point(3, 23);
             this.brushUpDown.Maximum = new decimal(new int[] {
             200,
             0,
@@ -576,6 +572,66 @@ namespace image_filtering
             0,
             0});
             this.brushUpDown.ValueChanged += new System.EventHandler(this.brushUpDown_ValueChanged);
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.Controls.Add(this.loadButton, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel9, 1, 0);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 1;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(296, 141);
+            this.tableLayoutPanel8.TabIndex = 5;
+            // 
+            // loadButton
+            // 
+            this.loadButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.loadButton.Location = new System.Drawing.Point(3, 3);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(142, 135);
+            this.loadButton.TabIndex = 0;
+            this.loadButton.Text = "load file";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 1;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Controls.Add(this.generateButton, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.sTrackBar, 0, 1);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(151, 3);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 2;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(142, 135);
+            this.tableLayoutPanel9.TabIndex = 1;
+            // 
+            // generateButton
+            // 
+            this.generateButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.generateButton.Location = new System.Drawing.Point(3, 3);
+            this.generateButton.Name = "generateButton";
+            this.generateButton.Size = new System.Drawing.Size(136, 61);
+            this.generateButton.TabIndex = 0;
+            this.generateButton.Text = "generate";
+            this.generateButton.UseVisualStyleBackColor = true;
+            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
+            // 
+            // sTrackBar
+            // 
+            this.sTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sTrackBar.Location = new System.Drawing.Point(3, 70);
+            this.sTrackBar.Name = "sTrackBar";
+            this.sTrackBar.Size = new System.Drawing.Size(136, 62);
+            this.sTrackBar.TabIndex = 1;
             // 
             // IF
             // 
@@ -604,6 +660,10 @@ namespace image_filtering
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.brushUpDown)).EndInit();
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sTrackBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -639,6 +699,10 @@ namespace image_filtering
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.NumericUpDown brushUpDown;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.Button generateButton;
+        private System.Windows.Forms.TrackBar sTrackBar;
     }
 }
 

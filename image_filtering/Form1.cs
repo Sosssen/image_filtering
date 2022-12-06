@@ -244,6 +244,36 @@ namespace image_filtering
             CountHistogram();
         }
 
+        public void GenerateHSVCircles()
+        {
+            image = new Bitmap(512, 512);
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                g.Clear(Color.Yellow);
+            }
+
+            drawArea = new DirectBitmap(image.Width, image.Height);
+
+            Canvas.Width = image.Width;
+            Canvas.Height = image.Height;
+            Canvas.Image = drawArea.Bitmap;
+
+            imageCopy = new DirectBitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(imageCopy.Bitmap))
+            {
+                g.DrawImage(image, 0, 0);
+            }
+
+            imageBackup = new DirectBitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(imageBackup.Bitmap))
+            {
+                g.DrawImage(image, 0, 0);
+            }
+
+            RedrawImage();
+            CountHistogram();
+        }
+
         public void RedrawImage(int x = -1, int y = -1)
         {
             using (Graphics g = Graphics.FromImage(drawArea.Bitmap))
@@ -1116,6 +1146,11 @@ namespace image_filtering
         private void Canvas_MouseLeave(object sender, EventArgs e)
         {
             RedrawImage(-1, -1);
+        }
+
+        private void generateButton_Click(object sender, EventArgs e)
+        {
+            GenerateHSVCircles();
         }
     }
 
