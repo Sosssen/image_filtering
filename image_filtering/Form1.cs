@@ -259,57 +259,61 @@ namespace image_filtering
 
             using (Graphics g = Graphics.FromImage(image))
             {
+                Point p1 = new Point(middleX, middleY - generateConst);
+                Point p2 = new Point(middleX + generateConst / 2, middleY - (int)(generateConst * Math.Sqrt(3)) / 2);
+
+                int circleRadius = (int)Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y)) / 2;
                 // middle
                 g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
                 g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
 
                 // 0
-                g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius - generateConst, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius - generateConst, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius, middleY - circleRadius - generateConst, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius, middleY - circleRadius - generateConst, 2 * circleRadius, 2 * circleRadius);
 
                 // 1
-                g.DrawEllipse(pen, middleX - pointRadius + generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius + generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius + generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius + generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 2
-                g.DrawEllipse(pen, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 3
-                g.DrawEllipse(pen, middleX - pointRadius + generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius + generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius + generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius + generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
 
                 // 4
-                g.DrawEllipse(pen, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 5
-                g.DrawEllipse(pen, middleX - pointRadius + generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius + generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius + generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius + generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 6
-                g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius + generateConst, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius + generateConst, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius, middleY - circleRadius + generateConst, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius, middleY - circleRadius + generateConst, 2 * circleRadius, 2 * circleRadius);
 
                 // 7
-                g.DrawEllipse(pen, middleX - pointRadius - generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius - generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius - generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius - generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 8
-                g.DrawEllipse(pen, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 9
-                g.DrawEllipse(pen, middleX - pointRadius - generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius - generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius - generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius - generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
 
                 // 10
-                g.DrawEllipse(pen, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 11
-                g.DrawEllipse(pen, middleX - pointRadius - generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius - generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.DrawEllipse(pen, middleX - circleRadius - generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                g.FillEllipse(sbBlack, middleX - circleRadius - generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
             }
 
             drawArea = new DirectBitmap(image.Width, image.Height);
