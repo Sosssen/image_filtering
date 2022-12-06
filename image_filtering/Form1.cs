@@ -12,7 +12,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace image_filtering
 {
-    public partial class Form1 : Form
+    public partial class IF : Form
     {
         private int mode = 0; // 0 - fill whole image, 1 - fill with brush, 2 - fill with polygon
 
@@ -55,7 +55,7 @@ namespace image_filtering
 
         private List<MyPoint> points = new List<MyPoint>();
         private int pointRadius = 3;
-        public Form1()
+        public IF()
         {
             InitializeComponent();
 
@@ -102,6 +102,9 @@ namespace image_filtering
             filterChart.ChartAreas[0].AxisY2.LabelStyle.Enabled = false;
             filterChart.ChartAreas[0].CursorX.LineWidth = 0;
             filterChart.ChartAreas[0].CursorY.LineWidth = 0;
+            filterChart.Series["filter"].BorderWidth = 3;
+            filterChart.Series["bezierPoints"].Color = Color.Red;
+            filterChart.Series["dashedLine"].BorderDashStyle = ChartDashStyle.Dot;
 
             brightnessUpDown.Value = brightnessConst;
             gammaUpDown.Value = Convert.ToDecimal(gammaConst);
@@ -481,6 +484,7 @@ namespace image_filtering
         public void DrawFilterChart()
         {
             filterChart.Series["filter"].Points.Clear();
+            filterChart.Series["dashedLine"].Points.Clear();
             filterChart.Series["bezierPoints"].Points.Clear();
 
             if (eraseRadioButton.Checked)
@@ -531,6 +535,7 @@ namespace image_filtering
 
                 foreach (var point in bezierPoints)
                 {
+                    filterChart.Series["dashedLine"].Points.Add(new DataPoint(point.x, point.y));
                     filterChart.Series["bezierPoints"].Points.Add(new DataPoint(point.x, point.y));
                 }
             }
@@ -726,6 +731,7 @@ namespace image_filtering
                 bezierPoints[bezierIndex].x = px;
                 bezierPoints[bezierIndex].y = py;
                 filterChart.Series["bezierPoints"].Points.Clear();
+                filterChart.Series["dashedLine"].Points.Clear();
                 filterChart.Series["filter"].Points.Clear();
 
                 InitializeOwnArray();
@@ -737,6 +743,7 @@ namespace image_filtering
 
                 for (int i = 0; i < bezierPoints.Length; i++)
                 {
+                    filterChart.Series["dashedLine"].Points.Add(new DataPoint(bezierPoints[i].x, bezierPoints[i].y));
                     filterChart.Series["bezierPoints"].Points.Add(new DataPoint(bezierPoints[i].x, bezierPoints[i].y));
                 }
 

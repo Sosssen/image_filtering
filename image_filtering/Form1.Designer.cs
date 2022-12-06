@@ -1,7 +1,7 @@
 ﻿
 namespace image_filtering
 {
-    partial class Form1
+    partial class IF
     {
         /// <summary>
         /// Required designer variable.
@@ -44,6 +44,7 @@ namespace image_filtering
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint7 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(0D, 0D);
             System.Windows.Forms.DataVisualization.Charting.DataPoint dataPoint8 = new System.Windows.Forms.DataVisualization.Charting.DataPoint(10D, 10D);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -437,16 +438,20 @@ namespace image_filtering
             this.filterChart.PaletteCustomColors = new System.Drawing.Color[] {
         System.Drawing.Color.Blue};
             series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
-            series4.Name = "bezierPoints";
-            series4.YValuesPerPoint = 2;
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Name = "dashedLine";
             series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Name = "filter";
-            series5.Points.Add(dataPoint7);
-            series5.Points.Add(dataPoint8);
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series5.Name = "bezierPoints";
+            series5.YValuesPerPoint = 2;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Name = "filter";
+            series6.Points.Add(dataPoint7);
+            series6.Points.Add(dataPoint8);
             this.filterChart.Series.Add(series4);
             this.filterChart.Series.Add(series5);
+            this.filterChart.Series.Add(series6);
             this.filterChart.Size = new System.Drawing.Size(302, 369);
             this.filterChart.TabIndex = 3;
             this.filterChart.Text = "chart1";
@@ -572,13 +577,13 @@ namespace image_filtering
             0});
             this.brushUpDown.ValueChanged += new System.EventHandler(this.brushUpDown_ValueChanged);
             // 
-            // Form1
+            // IF
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1574, 1129);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "Form1";
+            this.Name = "IF";
             this.Text = "Form1";
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).EndInit();
