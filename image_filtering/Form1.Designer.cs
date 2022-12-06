@@ -629,9 +629,12 @@ namespace image_filtering
             // 
             this.sTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sTrackBar.Location = new System.Drawing.Point(3, 70);
+            this.sTrackBar.Maximum = 100;
             this.sTrackBar.Name = "sTrackBar";
             this.sTrackBar.Size = new System.Drawing.Size(136, 62);
             this.sTrackBar.TabIndex = 1;
+            this.sTrackBar.Value = 1;
+            this.sTrackBar.ValueChanged += new System.EventHandler(this.sTrackBar_ValueChanged);
             // 
             // IF
             // 

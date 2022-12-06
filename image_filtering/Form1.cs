@@ -15,6 +15,7 @@ namespace image_filtering
     public partial class IF : Form
     {
         private int generateConst = 200;
+        private double s = 1.0;
 
         private int mode = 0;
 
@@ -72,6 +73,8 @@ namespace image_filtering
             int w = (int)(screen.Width / 1.15);
             int h = (int)(screen.Height / 1.15);
             this.Size = new Size(w, h);
+
+            sTrackBar.Value = (int)(s * 100);
 
             redChart.ChartAreas[0].AxisX.Minimum = -1;
             redChart.ChartAreas[0].AxisX.Maximum = 256;
@@ -261,59 +264,59 @@ namespace image_filtering
             {
                 Point p1 = new Point(middleX, middleY - generateConst);
                 Point p2 = new Point(middleX + generateConst / 2, middleY - (int)(generateConst * Math.Sqrt(3)) / 2);
+                SolidBrush hsvBrush = null;
 
-                int circleRadius = (int)Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y)) / 2;
+                int circleRadius = (int)(Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y)) / 2);
                 // middle
-                g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
-                g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                // g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
 
                 // 0
-                g.DrawEllipse(pen, middleX - circleRadius, middleY - circleRadius - generateConst, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius, middleY - circleRadius - generateConst, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(0, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius, middleY - circleRadius - generateConst, 2 * circleRadius, 2 * circleRadius);
 
                 // 1
-                g.DrawEllipse(pen, middleX - circleRadius + generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius + generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(30, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius + generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 2
-                g.DrawEllipse(pen, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(60, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 3
-                g.DrawEllipse(pen, middleX - circleRadius + generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius + generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(90, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius + generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
 
                 // 4
-                g.DrawEllipse(pen, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(120, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 5
-                g.DrawEllipse(pen, middleX - circleRadius + generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius + generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(150, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius + generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 6
-                g.DrawEllipse(pen, middleX - circleRadius, middleY - circleRadius + generateConst, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius, middleY - circleRadius + generateConst, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(180, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius, middleY - circleRadius + generateConst, 2 * circleRadius, 2 * circleRadius);
 
                 // 7
-                g.DrawEllipse(pen, middleX - circleRadius - generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius - generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(210, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius - generateConst / 2, middleY - circleRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 8
-                g.DrawEllipse(pen, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(240, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius + generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 9
-                g.DrawEllipse(pen, middleX - circleRadius - generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius - generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(270, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius - generateConst, middleY - circleRadius, 2 * circleRadius, 2 * circleRadius);
 
                 // 10
-                g.DrawEllipse(pen, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(300, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - circleRadius - generateConst / 2, 2 * circleRadius, 2 * circleRadius);
 
                 // 11
-                g.DrawEllipse(pen, middleX - circleRadius - generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
-                g.FillEllipse(sbBlack, middleX - circleRadius - generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
+                hsvBrush = new SolidBrush(ColorFromHSV(330, s, 1));
+                g.FillEllipse(hsvBrush, middleX - circleRadius - generateConst / 2, middleY - circleRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * circleRadius, 2 * circleRadius);
             }
 
             drawArea = new DirectBitmap(image.Width, image.Height);
@@ -1241,6 +1244,12 @@ namespace image_filtering
 
         private void generateButton_Click(object sender, EventArgs e)
         {
+            GenerateHSVCircles();
+        }
+
+        private void sTrackBar_ValueChanged(object sender, EventArgs e)
+        {
+            s = sTrackBar.Value / 100.0;
             GenerateHSVCircles();
         }
     }
