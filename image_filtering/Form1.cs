@@ -14,7 +14,7 @@ namespace image_filtering
 {
     public partial class IF : Form
     {
-        private int mode = 0; // 0 - fill whole image, 1 - fill with brush, 2 - fill with polygon
+        private int mode = 0;
 
         private DirectBitmap drawArea = null;
         private DirectBitmap imageCopy = null;
@@ -32,7 +32,6 @@ namespace image_filtering
         private int contrastConst2 = 0;
         private int contrastConst3 = 255;
         private int[] ownArr = new int[256];
-        
 
         private static int histogramSize = 256;
         private int[] histogramRed = new int[histogramSize];
@@ -46,7 +45,7 @@ namespace image_filtering
         private int radius = 30;
         private HashSet<Point> circles = new HashSet<Point>();
 
-        private int moving = 0; // 0 - not moving, 1 - moving LPM, 2 - moving PPM
+        private int moving = 0;
 
         private MyPoint[] bezierPoints = new MyPoint[4];
         private bool movingBezier = false;
@@ -222,16 +221,13 @@ namespace image_filtering
 
         public void LoadImage(string filename)
         {
-            // aktualny obraz, będzie modyfikowany
             image = new Bitmap(new Bitmap(filename), 512, 512);
 
-            // bitmapa do wyświetlenia
             drawArea = new DirectBitmap(image.Width, image.Height);
             Canvas.Width = image.Width;
             Canvas.Height = image.Height;
             Canvas.Image = drawArea.Bitmap;
 
-            // kopia załadowanego zdjęcia
             imageCopy = new DirectBitmap(image.Width, image.Height);
             using (Graphics g = Graphics.FromImage(imageCopy.Bitmap))
             {
@@ -293,7 +289,6 @@ namespace image_filtering
 
         public void midPointCircleDraw(DirectBitmap bitmap, int x_centre, int y_centre, int r, Color color)
         {
-
             int x = r, y = 0;
 
             DrawLine(bitmap, x + x_centre, y + y_centre, -x + x_centre, y + y_centre);
@@ -374,8 +369,6 @@ namespace image_filtering
             {
                 if (x >= 0 && y >= 0 && x < bitmap.Width && y < bitmap.Height)
                 {
-                    // Color oldColor = imageCopy.GetPixel(x, y);
-                    // Color newColor = Color.FromArgb(255 - oldColor.R, 255 - oldColor.G, 255 - oldColor.B);
                     Color color = GetColor(x, y);
                     bitmap.SetPixel(x, y, color);
                 }
@@ -619,11 +612,9 @@ namespace image_filtering
                 g.DrawImage(drawArea.Bitmap, 0, 0);
             }
 
-            // TODO: dont count rectangle points in histograms
             circles.Clear();
             RedrawImage(e.X, e.Y);
             CountHistogram();
-            
         }
 
         private void eraseRadioButton_Click(object sender, EventArgs e)
@@ -719,8 +710,6 @@ namespace image_filtering
         {
             if (movingBezier)
             {
-                // filterChart.ChartAreas[0].CursorX.Position = double.NaN;
-                // filterChart.ChartAreas[0].CursorY.Position = double.NaN;
                 filterChart.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), false);
                 filterChart.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), false);
                 int px = (int)filterChart.ChartAreas[0].CursorX.Position;
@@ -749,8 +738,6 @@ namespace image_filtering
                     filterChart.Series["dashedLine"].Points.Add(new DataPoint(bezierPoints[i].x, bezierPoints[i].y));
                     filterChart.Series["bezierPoints"].Points.Add(new DataPoint(bezierPoints[i].x, bezierPoints[i].y));
                 }
-
-                
             }
         }
 
@@ -779,9 +766,6 @@ namespace image_filtering
             {
                 double tx = A0x + t * (A1x + t * (A2x + t * A3x));
                 double ty = A0y + t * (A1y + t * (A2y + t * A3y));
-                // tx *= 255;
-                // ty *= 255;
-                // Debug.WriteLine($"{tx}, {ty}");
                 if (ty < 0) ty = 0;
                 if (ty > 255) ty = 255;
                 ownArr[(int)Math.Round(tx, 0)] = (int)Math.Round(ty, 0);
