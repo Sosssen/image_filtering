@@ -14,6 +14,8 @@ namespace image_filtering
 {
     public partial class IF : Form
     {
+        private int generateConst = 200;
+
         private int mode = 0;
 
         private DirectBitmap drawArea = null;
@@ -249,7 +251,65 @@ namespace image_filtering
             image = new Bitmap(512, 512);
             using (Graphics g = Graphics.FromImage(image))
             {
-                g.Clear(Color.Yellow);
+                g.Clear(Color.White);
+            }
+
+            int middleX = image.Height / 2;
+            int middleY = image.Width / 2;
+
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                // middle
+                g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+
+                // 0
+                g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius - generateConst, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius - generateConst, 2 * pointRadius, 2 * pointRadius);
+
+                // 1
+                g.DrawEllipse(pen, middleX - pointRadius + generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius + generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 2
+                g.DrawEllipse(pen, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 3
+                g.DrawEllipse(pen, middleX - pointRadius + generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius + generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+
+                // 4
+                g.DrawEllipse(pen, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 5
+                g.DrawEllipse(pen, middleX - pointRadius + generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius + generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 6
+                g.DrawEllipse(pen, middleX - pointRadius, middleY - pointRadius + generateConst, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius, middleY - pointRadius + generateConst, 2 * pointRadius, 2 * pointRadius);
+
+                // 7
+                g.DrawEllipse(pen, middleX - pointRadius - generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius - generateConst / 2, middleY - pointRadius + (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 8
+                g.DrawEllipse(pen, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius + generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 9
+                g.DrawEllipse(pen, middleX - pointRadius - generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius - generateConst, middleY - pointRadius, 2 * pointRadius, 2 * pointRadius);
+
+                // 10
+                g.DrawEllipse(pen, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, middleY - pointRadius - generateConst / 2, 2 * pointRadius, 2 * pointRadius);
+
+                // 11
+                g.DrawEllipse(pen, middleX - pointRadius - generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
+                g.FillEllipse(sbBlack, middleX - pointRadius - generateConst / 2, middleY - pointRadius - (int)(generateConst * Math.Sqrt(3)) / 2, 2 * pointRadius, 2 * pointRadius);
             }
 
             drawArea = new DirectBitmap(image.Width, image.Height);
@@ -272,6 +332,33 @@ namespace image_filtering
 
             RedrawImage();
             CountHistogram();
+        }
+
+
+
+        public static Color ColorFromHSV(double hue, double saturation, double value)
+        {
+            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+            double f = hue / 60 - Math.Floor(hue / 60);
+
+            value = value * 255;
+            int v = Convert.ToInt32(value);
+            int p = Convert.ToInt32(value * (1 - saturation));
+            int q = Convert.ToInt32(value * (1 - f * saturation));
+            int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+            if (hi == 0)
+                return Color.FromArgb(255, v, t, p);
+            else if (hi == 1)
+                return Color.FromArgb(255, q, v, p);
+            else if (hi == 2)
+                return Color.FromArgb(255, p, v, t);
+            else if (hi == 3)
+                return Color.FromArgb(255, p, q, v);
+            else if (hi == 4)
+                return Color.FromArgb(255, t, p, v);
+            else
+                return Color.FromArgb(255, v, p, q);
         }
 
         public void RedrawImage(int x = -1, int y = -1)
